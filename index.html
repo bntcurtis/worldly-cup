@@ -77,8 +77,10 @@
     color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.45);white-space:nowrap;transform:translateY(-50%)}
 
   /* pegman birthplace markers */
-  .peg{position:relative;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
-  .peg img{height:44px;display:block}
+  /* explicit size so MapLibre's translate(-50%) anchor uses the rendered width,
+     not the image's natural width (which threw pins ~13° off) */
+  .peg{position:relative;width:28px;height:46px;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
+  .peg img{width:28px;height:46px;display:block}
   .peg .badge{position:absolute;top:-6px;right:-9px;background:var(--accent);color:#06243b;font-weight:800;
     border:1.5px solid #fff;border-radius:11px;font-size:11px;line-height:16px;min-width:18px;text-align:center;padding:0 3px}
   @media (max-width:560px){ .panel{width:calc(100vw - 24px);left:12px;top:62px} .brand small{display:none} }
@@ -94,6 +96,7 @@
     <button class="tab" data-mode="game">Whose Team?</button>
     <button class="tab" data-mode="find">Birthplace Hunt</button>
   </div>
+  <button class="tab" id="namesBtn" style="margin-left:auto;font-size:12px" title="Show country names on hover (easy mode)">Country names: off</button>
 </div>
 
 <!-- EXPLORE -->
@@ -104,7 +107,7 @@
     <button class="primary" id="reveal">Reveal birthplaces</button>
     <button class="ghost tiny" id="reset">Reset</button>
   </div>
-  <div class="hint" id="exploreHint">Pick a team, then reveal where its 26 players were born. Hover any country for its name.</div>
+  <div class="hint" id="exploreHint">Pick a team, then reveal where its 26 players were born.</div>
   <div class="stat" id="stat"></div>
 </div>
 
@@ -137,14 +140,14 @@
   <div id="ftitle" style="font-size:16px;font-weight:700;margin:2px 0 6px"></div>
   <div class="scoreline">
     <span>Found <b id="ffound">0</b><span id="ftotal"></span></span>
-    <span>Strikes <span id="fstrikes" style="color:var(--red);letter-spacing:3px"></span></span>
+    <span>Misses <span id="fstrikes" style="color:var(--red);letter-spacing:3px"></span></span>
   </div>
   <div class="row">
-    <button class="ghost tiny" id="fhint">Hint: how many?</button>
+    <button class="ghost tiny" id="fhint">⚽ Assist: how many?</button>
     <button class="ghost tiny" id="fskip">Reveal &amp; skip</button>
     <button class="primary" id="fnext" style="display:none">Next team ▶</button>
   </div>
-  <div class="hint" id="fhintTxt">Click every country where this team's players were born — including their home country (highlighted gold). Hover for names.</div>
+  <div class="hint" id="fhintTxt">Click every country where this team's players were born — including their home country (highlighted gold).</div>
   <div class="flash" id="fflash"></div>
   <div class="result" id="fresult"></div>
 </div>
@@ -159,7 +162,7 @@ const ISO = f => { const p=f.properties; let i=p.ISO_A3_EH; if(!i||i==='-99') i=
 const POS = {GK:'Goalkeeper',DEF:'Defender',MID:'Midfielder',FWD:'Forward',FW:'Forward',ATT:'Forward'};
 const TODAY = new Date('2026-06-29');
 let MAP, DATA, GEO, FEAT_BY_ISO={}, mode='explore', markers=[];
-let TEAM_BY_ISO={}, POOL=[], used=new Set(), HI={};
+let TEAM_BY_ISO={}, POOL=[], used=new Set(), HI={}, hoverOn=false;
 let round=null, score=0, solved=0, played=0;
 let fround=null, fscore=0, fdone=0, flives=3;
 
@@ -208,14 +211,17 @@ async function init(){
   // hover tooltip with country name
   const tt=document.getElementById('tt');
   MAP.on('mousemove','country-fill', e=>{ const f=e.features[0]; if(!f) return;
-    tt.textContent=f.properties.NAME; tt.style.left=(e.point.x+14)+'px'; tt.style.top=(e.point.y)+'px'; tt.style.display='block';
+    if(hoverOn){ tt.textContent=f.properties.NAME; tt.style.left=(e.point.x+14)+'px'; tt.style.top=(e.point.y)+'px'; tt.style.display='block'; }
     MAP.getCanvas().style.cursor=((mode==='game'&&round&&!round.done)||(mode==='find'&&fround&&!fround.done))?'pointer':''; });
   MAP.on('mouseleave','country-fill', ()=>{ tt.style.display='none'; MAP.getCanvas().style.cursor=''; });
 
   document.getElementById('reveal').onclick=()=>revealTeam(document.getElementById('team').value);
   document.getElementById('team').onchange=e=>{ if(e.target.value) revealTeam(e.target.value); };
   document.getElementById('reset').onclick=resetExplore;
-  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchMode(t.dataset.mode));
+  document.querySelectorAll('.tab[data-mode]').forEach(t=>t.onclick=()=>switchMode(t.dataset.mode));
+  const namesBtn=document.getElementById('namesBtn');
+  namesBtn.onclick=()=>{ hoverOn=!hoverOn; namesBtn.textContent='Country names: '+(hoverOn?'on':'off');
+    namesBtn.classList.toggle('active',hoverOn); if(!hoverOn) document.getElementById('tt').style.display='none'; };
   document.getElementById('clueBtn').onclick=nextClue;
   document.getElementById('nextBtn').onclick=newRound;
   document.getElementById('fhint').onclick=findHint;
@@ -373,7 +379,7 @@ function endRound(win, pts){
   const sw = p.switched_from.length? ` Earlier represented ${p.switched_from.join(', ')}.`:'';
   const r=document.getElementById('result');
   r.className='result '+(win?'win':'lose'); r.style.display='block';
-  r.innerHTML = (win?`✅ <b>Correct!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${team.name}</b><br>`)+`It was <b>${p.name}</b>. ${story}${sw}`;
+  r.innerHTML = (win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${team.name}</b><br>`)+`It was <b>${p.name}</b>. ${story}${sw}`;
 }
 
 /* ---------- BIRTHPLACE HUNT ---------- */
@@ -422,7 +428,7 @@ function onFindGuess(iso){
     setHi(iso,'wrong');
     setTimeout(()=>delHi(iso),700);
     const left=3-fround.strikes;
-    document.getElementById('fflash').textContent = left>0 ? `❌ No player born there. ${left} ${left===1?'strike':'strikes'} left.` : '';
+    document.getElementById('fflash').textContent = left>0 ? `❌ No player born there. ${left} ${left===1?'miss':'misses'} left.` : '';
     if(fround.strikes>=3) endFindRound(false,'strikeout');
   }
 }
@@ -447,9 +453,9 @@ function endFindRound(win, reason){
   document.getElementById('fnext').style.display='';
   const missed=fround.answer.size-fround.found.size;
   const r=document.getElementById('fresult');
-  if(win){ r.className='result win'; r.innerHTML=`✅ <b>Complete!</b> <span class="pts">+${pts}</span><br>Found all ${fround.answer.size} birth countries${fround.strikes===0?' with no mistakes!':'.'}`; }
-  else if(flives<=0){ r.className='result lose'; r.innerHTML=`💔 <b>Game over.</b> Final score <span class="pts">${fscore}</span> · ${fdone} teams completed.`; document.getElementById('fnext').textContent='Play again'; }
-  else { r.className='result lose'; r.innerHTML=`${reason==='skip'?'👁 <b>Revealed.</b>':'❌ <b>Three strikes.</b>'} ${missed} birthplace${missed===1?'':'s'} left (shown teal).${reason==='strikeout'?' Lost a life.':''}`; }
+  if(win){ r.className='result win'; r.innerHTML=`⚽ <b>Full time!</b> <span class="pts">+${pts}</span><br>Found all ${fround.answer.size} birth countries${fround.strikes===0?' with a clean sheet!':'.'}`; }
+  else if(flives<=0){ r.className='result lose'; r.innerHTML=`📣 <b>Final whistle.</b> Final score <span class="pts">${fscore}</span> · ${fdone} teams completed.`; document.getElementById('fnext').textContent='Play again'; }
+  else { r.className='result lose'; r.innerHTML=`${reason==='skip'?'👁 <b>Revealed.</b>':'❌ <b>Three misses.</b>'} ${missed} birthplace${missed===1?'':'s'} left (shown teal).${reason==='strikeout'?' Lost a life.':''}`; }
   r.style.display='block';
   const b=new maplibregl.LngLatBounds();
   fround.team.players.forEach(pl=>{ if(pl.lng!=null) b.extend([pl.lng,pl.lat]); });
