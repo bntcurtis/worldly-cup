@@ -54,40 +54,45 @@
   .chip{font-size:11.5px;background:#13314c;border:1px solid var(--line);border-radius:20px;padding:3px 9px;color:var(--ink)}
   .chip .n{color:var(--teal);font-weight:700}
 
-  /* game */
   .scoreline{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
   .scoreline b{color:var(--ink);font-size:15px}
   .clues{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px}
-  .clue{background:#10283f;border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:14px;
-    animation:slide .35s ease}
+  .clue{background:#10283f;border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:14px;animation:slide .35s ease}
   .clue .k{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);display:block;margin-bottom:2px}
   @keyframes slide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
   .lives{letter-spacing:3px;font-size:15px}
   .result{margin-top:6px;padding:11px 13px;border-radius:12px;font-size:14px;line-height:1.45;display:none}
   .result.win{background:rgba(61,220,132,.13);border:1px solid var(--green)}
   .result.lose{background:rgba(232,80,107,.13);border:1px solid var(--red)}
-  .result b{color:var(--ink)}
-  .pts{color:var(--gold);font-weight:700}
+  .result b{color:var(--ink)} .pts{color:var(--gold);font-weight:700}
+  .flash{margin-top:8px;font-size:13px;font-weight:600;min-height:18px;color:var(--red);transition:.1s}
 
   .legend{position:absolute;bottom:16px;left:16px;z-index:6;background:var(--panel);border:1px solid var(--line);
     border-radius:14px;padding:10px 13px;font-size:12px;color:var(--muted);backdrop-filter:blur(14px)}
   .legend .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 
-  .pin{width:16px;height:16px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
-    border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5);cursor:pointer;position:relative}
-  .pin.home{background:var(--gold)} .pin.foreign{background:var(--teal)}
-  .pin .badge{position:absolute;top:-7px;right:-7px;transform:rotate(45deg);background:#0d2033;color:#fff;
-    border:1px solid #fff;border-radius:10px;font-size:10px;line-height:14px;min-width:15px;text-align:center;padding:0 2px}
+  /* hover tooltip (replaces always-on labels) */
+  #tt{position:absolute;z-index:7;pointer-events:none;display:none;background:var(--panel-solid);
+    border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;
+    color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.45);white-space:nowrap;transform:translateY(-50%)}
+
+  /* pegman birthplace markers */
+  .peg{position:relative;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
+  .peg img{height:44px;display:block}
+  .peg .badge{position:absolute;top:-6px;right:-9px;background:var(--accent);color:#06243b;font-weight:800;
+    border:1.5px solid #fff;border-radius:11px;font-size:11px;line-height:16px;min-width:18px;text-align:center;padding:0 3px}
   @media (max-width:560px){ .panel{width:calc(100vw - 24px);left:12px;top:62px} .brand small{display:none} }
 </style>
 </head>
 <body>
 <div id="map"></div>
+<div id="tt"></div>
 <div class="topbar">
   <div class="brand"><span class="globe">🌍</span>WorldlyCup</div>
   <div class="tabs">
     <button class="tab active" data-mode="explore">Explore</button>
     <button class="tab" data-mode="game">Whose Team?</button>
+    <button class="tab" data-mode="find">Birthplace Hunt</button>
   </div>
 </div>
 
@@ -97,10 +102,9 @@
   <div class="row"><select id="team"><option value="">Choose a national team…</option></select></div>
   <div class="row">
     <button class="primary" id="reveal">Reveal birthplaces</button>
-    <button class="ghost tiny" id="labels">Labels: off</button>
     <button class="ghost tiny" id="reset">Reset</button>
   </div>
-  <div class="hint" id="exploreHint">Pick a team, then reveal where its 26 players were born.</div>
+  <div class="hint" id="exploreHint">Pick a team, then reveal where its 26 players were born. Hover any country for its name.</div>
   <div class="stat" id="stat"></div>
 </div>
 
@@ -117,8 +121,32 @@
     <button class="ghost" id="clueBtn">🔍 Next clue <span id="cluePts" style="color:var(--gold)"></span></button>
     <button class="primary" id="nextBtn" style="display:none">Next player ▶</button>
   </div>
-  <div class="hint" id="gameHint">Click the country on the map you think they play for. The 48 competing nations are highlighted.</div>
+  <div class="hint" id="gameHint">Click the country on the map you think they <b>currently play for</b>. The 48 competing nations are highlighted blue.</div>
+  <div class="flash" id="flash"></div>
   <div class="result" id="result"></div>
+</div>
+
+<!-- BIRTHPLACE HUNT -->
+<div class="panel" id="findPanel" style="display:none">
+  <div class="scoreline">
+    <span>Score <b id="fscore">0</b></span>
+    <span>Teams <b id="fdone">0</b></span>
+    <span class="lives" id="flives" title="lives left"></span>
+  </div>
+  <h2>Birthplace hunt</h2>
+  <div id="ftitle" style="font-size:16px;font-weight:700;margin:2px 0 6px"></div>
+  <div class="scoreline">
+    <span>Found <b id="ffound">0</b><span id="ftotal"></span></span>
+    <span>Strikes <span id="fstrikes" style="color:var(--red);letter-spacing:3px"></span></span>
+  </div>
+  <div class="row">
+    <button class="ghost tiny" id="fhint">Hint: how many?</button>
+    <button class="ghost tiny" id="fskip">Reveal &amp; skip</button>
+    <button class="primary" id="fnext" style="display:none">Next team ▶</button>
+  </div>
+  <div class="hint" id="fhintTxt">Click every country where this team's players were born — including their home country (highlighted gold). Hover for names.</div>
+  <div class="flash" id="fflash"></div>
+  <div class="result" id="fresult"></div>
 </div>
 
 <div class="legend" id="legend">
@@ -127,15 +155,13 @@
 </div>
 
 <script>
-window.__E=[];
-window.addEventListener('error', e=>window.__E.push('WIN: '+(e.message||e)+' @'+((e.filename||'').split('/').pop())+':'+e.lineno));
-window.addEventListener('unhandledrejection', e=>window.__E.push('REJECT: '+(e.reason&&e.reason.message||e.reason)));
 const ISO = f => { const p=f.properties; let i=p.ISO_A3_EH; if(!i||i==='-99') i=p.ISO_A3; return i; };
 const POS = {GK:'Goalkeeper',DEF:'Defender',MID:'Midfielder',FWD:'Forward',FW:'Forward',ATT:'Forward'};
 const TODAY = new Date('2026-06-29');
-let MAP, DATA, GEO, mode='explore', markers=[], shaded=new Set(), labelsOn=false;
-let TEAM_BY_ISO={}, POOL=[], used=new Set();
+let MAP, DATA, GEO, FEAT_BY_ISO={}, mode='explore', markers=[];
+let TEAM_BY_ISO={}, POOL=[], used=new Set(), HI={};
 let round=null, score=0, solved=0, played=0;
+let fround=null, fscore=0, fdone=0, flives=3;
 
 const age = dob => { const d=new Date(dob); let a=TODAY.getFullYear()-d.getFullYear();
   if(TODAY.getMonth()<d.getMonth()||(TODAY.getMonth()==d.getMonth()&&TODAY.getDate()<d.getDate())) a--; return a; };
@@ -143,11 +169,10 @@ const age = dob => { const d=new Date(dob); let a=TODAY.getFullYear()-d.getFullY
 async function init(){
   [GEO, DATA] = await Promise.all([
     fetch('countries_50m.geojson').then(r=>r.json()),
-    fetch('app_data.json').then(r=>r.json())
+    fetch('app_data.json?v='+Date.now()).then(r=>r.json())   // avoid stale cached data
   ]);
-  GEO.features.forEach(f=> f.id = ISO(f));
+  GEO.features.forEach(f=>{ f.id = ISO(f); FEAT_BY_ISO[f.id]=f; });
   DATA.teams.forEach(t=>{ if(t.iso3) TEAM_BY_ISO[t.iso3]=t; });
-  // quiz pool: high-confidence players with an interesting origin story
   DATA.teams.forEach(t=>t.players.forEach(p=>{
     if(p.confidence==='high' && p.lat!=null && (p.born_abroad||p.switched_from.length||p.citizenships.length>1))
       POOL.push({p, team:t});
@@ -155,73 +180,80 @@ async function init(){
 
   MAP = new maplibregl.Map({
     container:'map',
-    style:{ version:8, glyphs:'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-      sources:{}, layers:[{ id:'bg', type:'background', paint:{'background-color':'#081726'} }] },
-    center:[8,26], zoom:1.7, minZoom:1, maxZoom:7, attributionControl:false, renderWorldCopies:true
+    style:{ version:8, sources:{}, layers:[{ id:'bg', type:'background', paint:{'background-color':'#081726'} }] },
+    center:[8,26], zoom:1.7, minZoom:.8, maxZoom:7, attributionControl:false, renderWorldCopies:true
   });
-  MAP.on('error', e=>window.__E.push('MAP: '+((e&&e.error&&e.error.message)||JSON.stringify(e).slice(0,200))));
   MAP.addControl(new maplibregl.NavigationControl({showCompass:false}),'bottom-right');
   MAP.on('load', ()=>{
-    // add the country layers after load (robust for large inline GeoJSON)
     MAP.addSource('countries', { type:'geojson', data:GEO });
-    MAP.addLayer({ id:'country-fill', type:'fill', source:'countries', paint:{
-        'fill-color':['case',
-          ['boolean',['feature-state','correct'],false], '#3ddc84',
-          ['boolean',['feature-state','wrong'],false], '#e8506b',
-          ['boolean',['feature-state','home'],false], '#f4c145',
-          ['boolean',['feature-state','origin'],false], '#2ec5b6',
-          ['boolean',['feature-state','team'],false], '#2c5d8a',
-          '#11304a'],
-        'fill-opacity':['case',
-          ['boolean',['feature-state','correct'],false], .92,
-          ['boolean',['feature-state','wrong'],false], .9,
-          ['boolean',['feature-state','home'],false], .92,
-          ['boolean',['feature-state','origin'],false], .85,
-          ['boolean',['feature-state','team'],false], .8,
-          .6] } });
+    MAP.addLayer({ id:'country-fill', type:'fill', source:'countries', paint:{'fill-color':'#11304a','fill-opacity':.55} });
     MAP.addLayer({ id:'country-borders', type:'line', source:'countries',
       paint:{'line-color':'#2d5a7a','line-width':['interpolate',['linear'],['zoom'],1,.4,5,1.1]} });
-    MAP.addLayer({ id:'country-labels', type:'symbol', source:'countries',
-      layout:{ 'text-field':['get','NAME'],'text-font':['Noto Sans Regular'],
-        'text-size':['interpolate',['linear'],['zoom'],1,9,5,15],'text-transform':'uppercase',
-        'text-letter-spacing':.05,'visibility':'none' },
-      paint:{'text-color':'#cfe2f2','text-halo-color':'#081726','text-halo-width':1.4} });
+    // dedicated highlight layers, updated imperatively via setData (renders reliably)
+    MAP.addSource('hi', { type:'geojson', data:{type:'FeatureCollection',features:[]} });
+    MAP.addLayer({ id:'hi-fill', type:'fill', source:'hi', paint:{
+      'fill-color':['match',['get','kind'],'home','#f4c145','origin','#2ec5b6','correct','#3ddc84','wrong','#e8506b','team','#3a6f9e','#3ddc84'],
+      'fill-opacity':['match',['get','kind'],'team',.55,.82] } });
+    MAP.addLayer({ id:'hi-line', type:'line', source:'hi', paint:{
+      'line-color':['match',['get','kind'],'home','#ffe08a','origin','#7fe9dd','correct','#9bffc4','wrong','#ff8aa1','team','#5d92c0','#fff'],
+      'line-width':['match',['get','kind'],'team',.8,2.6] } });
     const sel=document.getElementById('team');
     DATA.teams.forEach(t=>{ const o=document.createElement('option'); o.value=t.name;
       o.textContent=`${t.name}  (${t.stats.n_born_abroad}/${t.stats.squad_size} born abroad)`; sel.appendChild(o); });
   });
-  MAP.on('click','country-fill', e=>{ if(mode==='game' && e.features[0]) onGuess(e.features[0].id); });
-  MAP.on('mouseenter','country-fill',()=>{ if(mode==='game' && round && !round.done) MAP.getCanvas().style.cursor='pointer'; });
-  MAP.on('mouseleave','country-fill',()=> MAP.getCanvas().style.cursor='');
+  // map click routes to the active game
+  MAP.on('click','country-fill', e=>{ if(!e.features[0]) return;
+    if(mode==='game') onGuess(e.features[0].id, e.features[0].properties.NAME);
+    else if(mode==='find') onFindGuess(e.features[0].id); });
+  // hover tooltip with country name
+  const tt=document.getElementById('tt');
+  MAP.on('mousemove','country-fill', e=>{ const f=e.features[0]; if(!f) return;
+    tt.textContent=f.properties.NAME; tt.style.left=(e.point.x+14)+'px'; tt.style.top=(e.point.y)+'px'; tt.style.display='block';
+    MAP.getCanvas().style.cursor=((mode==='game'&&round&&!round.done)||(mode==='find'&&fround&&!fround.done))?'pointer':''; });
+  MAP.on('mouseleave','country-fill', ()=>{ tt.style.display='none'; MAP.getCanvas().style.cursor=''; });
 
-  // explore handlers
   document.getElementById('reveal').onclick=()=>revealTeam(document.getElementById('team').value);
   document.getElementById('team').onchange=e=>{ if(e.target.value) revealTeam(e.target.value); };
   document.getElementById('reset').onclick=resetExplore;
-  document.getElementById('labels').onclick=toggleLabels;
-  // tabs
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchMode(t.dataset.mode));
-  // game handlers
   document.getElementById('clueBtn').onclick=nextClue;
   document.getElementById('nextBtn').onclick=newRound;
+  document.getElementById('fhint').onclick=findHint;
+  document.getElementById('fskip').onclick=()=>endFindRound(false,'skip');
+  document.getElementById('fnext').onclick=()=>{ if(flives<=0){ fscore=0; fdone=0; flives=3; } newFindRound(); };
 }
 
-/* ---------- shared map helpers ---------- */
-function clearStates(keys){ shaded.forEach(iso=>{ const s={}; keys.forEach(k=>s[k]=false); MAP.setFeatureState({source:'countries',id:iso},s); }); }
-function clearShading(){ shaded.forEach(iso=>MAP.setFeatureState({source:'countries',id:iso},{home:false,origin:false,team:false,correct:false,wrong:false})); shaded.clear(); }
+/* ---------- highlight layer (reliable replacement for feature-state) ---------- */
+function renderHi(){
+  const feats=[];
+  for(const iso in HI){ const f=FEAT_BY_ISO[iso]; if(f) feats.push({type:'Feature',properties:{kind:HI[iso]},geometry:f.geometry}); }
+  const s=MAP.getSource('hi'); if(s) s.setData({type:'FeatureCollection',features:feats});
+}
+function setHi(iso,kind){ if(iso){ HI[iso]=kind; renderHi(); } }
+function delHi(iso){ delete HI[iso]; renderHi(); }
+function clearHi(){ HI={}; renderHi(); }
 function clearMarkers(){ markers.forEach(m=>m.remove()); markers=[]; }
-function setState(iso,st){ MAP.setFeatureState({source:'countries',id:iso},st); shaded.add(iso); }
-function toggleLabels(){ labelsOn=!labelsOn;
-  MAP.setLayoutProperty('country-labels','visibility',labelsOn?'visible':'none');
-  document.getElementById('labels').textContent='Labels: '+(labelsOn?'on':'off'); }
 
-function dropPin(p, home){
-  const el=document.createElement('div'); el.className='pin '+(home?'home':'foreign');
-  const popup=new maplibregl.Popup({offset:18,closeButton:false}).setHTML(
-    `<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${p.born_city||''}, ${p.born_in}</div>`+
-    `<div style="margin-top:5px"><b>${p.name}</b> · ${POS[p.pos]||p.pos} · ${p.club}</div>`);
-  const m=new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat([p.lng,p.lat]).setPopup(popup).addTo(MAP);
-  markers.push(m); return m;
+function repPoint(f){
+  const g=f.geometry; let ring;
+  if(g.type==='Polygon') ring=g.coordinates[0];
+  else { let bl=-1; g.coordinates.forEach(poly=>{ if(poly[0].length>bl){ bl=poly[0].length; ring=poly[0]; } }); }
+  let x=0,y=0; ring.forEach(c=>{ x+=c[0]; y+=c[1]; });
+  return [x/ring.length, y/ring.length];
+}
+function countryPoint(iso){ const f=FEAT_BY_ISO[iso]; return f?repPoint(f):null; }
+
+function dropPin(p, group){
+  const el=document.createElement('div'); el.className='peg';
+  el.innerHTML='<img src="pegman-white.png" alt="player">';
+  const n=group?group.length:1;
+  if(n>1){ const b=document.createElement('div'); b.className='badge'; b.textContent=n; el.appendChild(b); }
+  const list=(group||[p]);
+  const rows=list.map(q=>{ const sw=q.switched_from&&q.switched_from.length?`<div style="color:var(--teal);font-size:11.5px">↪ also: ${q.switched_from.join(', ')}</div>`:'';
+    return `<div style="margin:2px 0"><b>${q.name}</b> <span style="color:var(--muted)">· ${POS[q.pos]||q.pos} · ${q.club}</span>${sw}</div>`; }).join('');
+  const popup=new maplibregl.Popup({offset:[0,-38],closeButton:false}).setHTML(
+    `<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${p.born_city||''}, ${p.born_in}</div><div style="margin-top:6px">${rows}</div>`);
+  markers.push(new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat([p.lng,p.lat]).setPopup(popup).addTo(MAP));
 }
 
 /* ---------- mode switching ---------- */
@@ -230,38 +262,30 @@ function switchMode(m){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===m));
   document.getElementById('explorePanel').style.display = m==='explore'?'block':'none';
   document.getElementById('gamePanel').style.display    = m==='game'?'block':'none';
+  document.getElementById('findPanel').style.display    = m==='find'?'block':'none';
   document.getElementById('legend').style.display       = m==='explore'?'block':'none';
-  clearShading(); clearMarkers();
+  clearHi(); clearMarkers();
   document.getElementById('stat').style.display='none';
-  if(m==='game'){ if(!round) newRound(); else { highlightTeams(); MAP.flyTo({center:[8,26],zoom:1.7}); } }
+  if(m==='game'){ if(!round) newRound(); else { highlightTeams(); MAP.flyTo({center:[-25,25],zoom:1.05}); } }
+  else if(m==='find'){ if(!fround||fround.done) newFindRound(); else renderFindState(); }
   else { MAP.flyTo({center:[8,26],zoom:1.7}); }
 }
 
 /* ---------- EXPLORE ---------- */
-function resetExplore(){ clearShading(); clearMarkers(); document.getElementById('stat').style.display='none';
+function resetExplore(){ clearHi(); clearMarkers(); document.getElementById('stat').style.display='none';
   document.getElementById('team').value=''; document.getElementById('exploreHint').style.display='block';
   MAP.flyTo({center:[8,26],zoom:1.7}); }
 
 function revealTeam(name){
   if(!name) return; const team=DATA.teams.find(t=>t.name===name); if(!team) return;
-  clearShading(); clearMarkers();
-  setState(team.iso3,{home:true});
-  Object.entries(team.birth_iso3).forEach(([c,iso])=>{ if(iso!==team.iso3) setState(iso,{origin:true}); });
+  clearHi(); clearMarkers();
+  setHi(team.iso3,'home');
+  Object.entries(team.birth_iso3).forEach(([c,iso])=>{ if(iso!==team.iso3) setHi(iso,'origin'); });
   const groups={};
   team.players.forEach(p=>{ if(p.lat==null) return; const k=p.lat.toFixed(2)+','+p.lng.toFixed(2);
     (groups[k]=groups[k]||{lat:p.lat,lng:p.lng,city:p.born_city,country:p.born_in,players:[]}).players.push(p); });
   const bounds=new maplibregl.LngLatBounds();
-  Object.values(groups).forEach(g=>{
-    const home=g.country===team.name;
-    const el=document.createElement('div'); el.className='pin '+(home?'home':'foreign');
-    if(g.players.length>1){ const b=document.createElement('div'); b.className='badge'; b.textContent=g.players.length; el.appendChild(b); }
-    const rows=g.players.map(p=>{ const t=p.switched_from.length?`<div style="color:var(--teal);font-size:11.5px">↪ also: ${p.switched_from.join(', ')}</div>`:'';
-      return `<div style="margin:2px 0"><b>${p.name}</b> <span style="color:var(--muted)">· ${POS[p.pos]||p.pos} · ${p.club}</span>${t}</div>`; }).join('');
-    const popup=new maplibregl.Popup({offset:18,closeButton:false}).setHTML(
-      `<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${g.city||''}, ${g.country}</div><div style="margin-top:6px">${rows}</div>`);
-    markers.push(new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat([g.lng,g.lat]).setPopup(popup).addTo(MAP));
-    bounds.extend([g.lng,g.lat]);
-  });
+  Object.values(groups).forEach(g=>{ dropPin(g.players[0], g.players); bounds.extend([g.lng,g.lat]); });
   if(!bounds.isEmpty()) MAP.fitBounds(bounds,{padding:{top:90,bottom:60,left:380,right:60},maxZoom:5,duration:900});
   const s=team.stats, st=document.getElementById('stat');
   const chips=Object.entries(s.foreign_born_counts).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<span class="chip">${c} <span class="n">${n}</span></span>`).join('');
@@ -272,20 +296,11 @@ function revealTeam(name){
 }
 
 /* ---------- WHOSE TEAM? ---------- */
-function highlightTeams(){ clearShading(); DATA.teams.forEach(t=>{ if(t.iso3) setState(t.iso3,{team:true}); }); }
-
-function featureBounds(iso){
-  const f=GEO.features.find(x=>x.id===iso); if(!f) return null;
-  const b=new maplibregl.LngLatBounds();
-  (function add(cs){ cs.forEach(c=> typeof c[0]==='number' ? b.extend(c) : add(c)); })(f.geometry.coordinates);
-  return b;
-}
+function highlightTeams(){ clearHi(); DATA.teams.forEach(t=>{ if(t.iso3) HI[t.iso3]='team'; }); renderHi(); }
 
 function buildClues(p, team){
-  const c=[];
-  c.push(['Born in', `${p.born_city?p.born_city+', ':''}${p.born_in}`]);
-  c.push(['Profile', `${POS[p.pos]||p.pos}, ${age(p.dob)} years old`]);
-  const otherYouth=p.youth_for.filter(x=>x!==team.name);
+  const c=[['Born in', `${p.born_city?p.born_city+', ':''}${p.born_in}`],
+           ['Profile', `${POS[p.pos]||p.pos}, ${age(p.dob)} years old`]];
   if(p.youth_for.length) c.push(['Youth career', `Played youth international football for ${p.youth_for.join(', ')}`]);
   if(p.citizenships.length>1) c.push(['Eligibility', `Holds citizenship of ${p.citizenships.join(', ')}`]);
   c.push(['Club', `Plays his club football for ${p.club}`]);
@@ -293,18 +308,17 @@ function buildClues(p, team){
 }
 
 function newRound(){
-  // pick an unused interesting player
-  let cand; let guard=0;
+  let cand,guard=0;
   do{ cand=POOL[Math.floor(Math.random()*POOL.length)]; guard++; } while(used.has(cand.p.name)&&guard<200);
   used.add(cand.p.name);
   round={ p:cand.p, team:cand.team, clues:buildClues(cand.p,cand.team), shown:0, wrongs:0, done:false };
-  clearShading(); clearMarkers(); highlightTeams();
-  MAP.flyTo({center:[8,26],zoom:1.7});
+  clearMarkers(); highlightTeams();
+  MAP.flyTo({center:[-25,25],zoom:1.05});
   document.getElementById('clues').innerHTML='';
   document.getElementById('result').style.display='none';
+  document.getElementById('flash').textContent='';
   document.getElementById('nextBtn').style.display='none';
-  document.getElementById('clueBtn').style.display='';
-  document.getElementById('clueBtn').disabled=false;
+  document.getElementById('clueBtn').style.display=''; document.getElementById('clueBtn').disabled=false;
   document.getElementById('gameHint').style.display='block';
   updateLives(); nextClue();
 }
@@ -316,52 +330,130 @@ function nextClue(){
   const div=document.createElement('div'); div.className='clue'; div.innerHTML=`<span class="k">${k}</span>${v}`;
   document.getElementById('clues').appendChild(div);
   if(round.shown>=round.clues.length) document.getElementById('clueBtn').disabled=true;
-  document.getElementById('cluePts').textContent = ` (−20 pts)`;
+  document.getElementById('cluePts').textContent=` (−20 pts)`;
 }
 
 function roundPoints(){ return Math.max(10, 100 - 20*(round.shown-1) - 30*round.wrongs); }
-function updateLives(){ const left=3-round.wrongs;
-  document.getElementById('lives').textContent='●'.repeat(Math.max(0,left))+'○'.repeat(round.wrongs); }
+function updateLives(){ document.getElementById('lives').textContent='●'.repeat(Math.max(0,3-round.wrongs))+'○'.repeat(round.wrongs); }
 
-function onGuess(iso){
+function onGuess(iso, name){
   if(!round||round.done) return;
   const team=round.team;
   if(iso===team.iso3){
     const pts=roundPoints(); score+=pts; solved++; played++;
-    setState(iso,{team:false,correct:true});
     endRound(true, pts);
   } else {
     round.wrongs++; updateLives();
-    // flash the wrong country red briefly
-    if(TEAM_BY_ISO[iso]){ MAP.setFeatureState({source:'countries',id:iso},{team:false,wrong:true}); shaded.add(iso);
-      setTimeout(()=>MAP.setFeatureState({source:'countries',id:iso},{wrong:false,team:true}),750); }
+    setHi(iso,'wrong');                                   // bold red, obvious
+    setTimeout(()=>{ if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
+    const left=3-round.wrongs;
+    document.getElementById('flash').textContent = left>0
+      ? `❌ Not ${name||'there'} — they don't play for that country. ${left} ${left===1?'guess':'guesses'} left.`
+      : '';
     if(round.wrongs>=3){ played++; endRound(false,0); }
   }
 }
 
 function endRound(win, pts){
-  round.done=true;
-  const team=round.team, p=round.p;
-  // reveal: shade answer green + drop their birthplace pin
-  setState(team.iso3,{team:false,correct:true});
-  dropPin(p, p.born_in===team.name);
-  // frame both the birthplace and the country they represent ("born here → plays there")
-  const b = featureBounds(team.iso3) || new maplibregl.LngLatBounds();
+  round.done=true; const team=round.team, p=round.p;
+  setHi(team.iso3,'correct');                              // bold green answer
+  dropPin(p);
+  const b=new maplibregl.LngLatBounds();
   if(p.lng!=null) b.extend([p.lng,p.lat]);
-  MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
+  const cp=countryPoint(team.iso3); if(cp) b.extend(cp);
+  if(!b.isEmpty()) MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
   document.getElementById('score').textContent=score;
   document.getElementById('solved').textContent=solved;
   document.getElementById('played').textContent=played;
   document.getElementById('clueBtn').style.display='none';
   document.getElementById('nextBtn').style.display='';
   document.getElementById('gameHint').style.display='none';
-  const story = p.born_in!==team.name ? `Born in <b>${p.born_in}</b>, plays for <b>${team.name}</b>.`
-                                      : `Plays for <b>${team.name}</b>.`;
+  document.getElementById('flash').textContent='';
+  const story = p.born_in!==team.name ? `Born in <b>${p.born_in}</b>, plays for <b>${team.name}</b>.` : `Plays for <b>${team.name}</b>.`;
   const sw = p.switched_from.length? ` Earlier represented ${p.switched_from.join(', ')}.`:'';
   const r=document.getElementById('result');
   r.className='result '+(win?'win':'lose'); r.style.display='block';
-  r.innerHTML = (win?`✅ <b>Correct!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${team.name}</b><br>`)
-    + `It was <b>${p.name}</b>. ${story}${sw}`;
+  r.innerHTML = (win?`✅ <b>Correct!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${team.name}</b><br>`)+`It was <b>${p.name}</b>. ${story}${sw}`;
+}
+
+/* ---------- BIRTHPLACE HUNT ---------- */
+function updateFLives(){ document.getElementById('flives').textContent='●'.repeat(Math.max(0,flives))+'○'.repeat(3-flives); }
+
+function newFindRound(){
+  const team = DATA.teams[Math.floor(Math.random()*DATA.teams.length)];
+  const answer = new Set(Object.values(team.birth_iso3));
+  fround={ team, answer, found:new Set(), strikes:0, done:false, hinted:false };
+  clearHi(); clearMarkers();
+  setHi(team.iso3,'home');
+  MAP.flyTo({center:[-25,25],zoom:1.05,duration:700});
+  document.getElementById('ftitle').textContent=`Where were ${team.name}'s players born?`;
+  document.getElementById('ffound').textContent='0';
+  document.getElementById('ftotal').textContent='';
+  document.getElementById('fstrikes').textContent='○○○';
+  document.getElementById('fflash').textContent='';
+  document.getElementById('fresult').style.display='none';
+  document.getElementById('fnext').style.display='none'; document.getElementById('fnext').textContent='Next team ▶';
+  document.getElementById('fhint').disabled=false;
+  document.getElementById('fskip').style.display='';
+  document.getElementById('fhintTxt').style.display='block';
+  updateFLives();
+}
+
+function renderFindState(){
+  clearHi();
+  if(!fround) return;
+  if(!fround.found.has(fround.team.iso3)) HI[fround.team.iso3]='home';
+  fround.found.forEach(iso=>HI[iso]='correct');
+  if(fround.done) fround.answer.forEach(iso=>{ if(!fround.found.has(iso)) HI[iso]='origin'; });
+  renderHi();
+}
+
+function onFindGuess(iso){
+  if(!fround||fround.done||fround.found.has(iso)) return;
+  if(fround.answer.has(iso)){
+    fround.found.add(iso);
+    setHi(iso,'correct');
+    document.getElementById('ffound').textContent=fround.found.size;
+    document.getElementById('fflash').textContent='';
+    if(fround.found.size===fround.answer.size) endFindRound(true);
+  } else {
+    fround.strikes++;
+    document.getElementById('fstrikes').textContent='●'.repeat(fround.strikes)+'○'.repeat(3-fround.strikes);
+    setHi(iso,'wrong');
+    setTimeout(()=>delHi(iso),700);
+    const left=3-fround.strikes;
+    document.getElementById('fflash').textContent = left>0 ? `❌ No player born there. ${left} ${left===1?'strike':'strikes'} left.` : '';
+    if(fround.strikes>=3) endFindRound(false,'strikeout');
+  }
+}
+
+function findHint(){ if(!fround||fround.done) return;
+  fround.hinted=true; document.getElementById('ftotal').textContent=' / '+fround.answer.size;
+  document.getElementById('fhint').disabled=true; }
+
+function endFindRound(win, reason){
+  fround.done=true;
+  fround.answer.forEach(iso=>{ if(!fround.found.has(iso)) HI[iso]='origin'; }); renderHi();
+  let pts=fround.found.size*10 + (win && fround.strikes===0 ? 25 : 0);
+  fscore+=pts; if(win) fdone++;
+  if(reason==='strikeout'){ flives--; updateFLives(); }
+  document.getElementById('fscore').textContent=fscore;
+  document.getElementById('fdone').textContent=fdone;
+  document.getElementById('ftotal').textContent=' / '+fround.answer.size;
+  document.getElementById('fhint').disabled=true;
+  document.getElementById('fskip').style.display='none';
+  document.getElementById('fhintTxt').style.display='none';
+  document.getElementById('fflash').textContent='';
+  document.getElementById('fnext').style.display='';
+  const missed=fround.answer.size-fround.found.size;
+  const r=document.getElementById('fresult');
+  if(win){ r.className='result win'; r.innerHTML=`✅ <b>Complete!</b> <span class="pts">+${pts}</span><br>Found all ${fround.answer.size} birth countries${fround.strikes===0?' with no mistakes!':'.'}`; }
+  else if(flives<=0){ r.className='result lose'; r.innerHTML=`💔 <b>Game over.</b> Final score <span class="pts">${fscore}</span> · ${fdone} teams completed.`; document.getElementById('fnext').textContent='Play again'; }
+  else { r.className='result lose'; r.innerHTML=`${reason==='skip'?'👁 <b>Revealed.</b>':'❌ <b>Three strikes.</b>'} ${missed} birthplace${missed===1?'':'s'} left (shown teal).${reason==='strikeout'?' Lost a life.':''}`; }
+  r.style.display='block';
+  const b=new maplibregl.LngLatBounds();
+  fround.team.players.forEach(pl=>{ if(pl.lng!=null) b.extend([pl.lng,pl.lat]); });
+  if(!b.isEmpty()) MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
 }
 init();
 </script>

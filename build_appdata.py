@@ -1,144 +1,132 @@
 #!/usr/bin/env python3
-"""Transform players_worldcup2026.csv into app_data.json — the game-ready data layer
-shared by both games and the explore/reveal view."""
+"""Transform players_worldcup2026.csv into app_data.json — the game-ready data layer.
+
+born_in is derived from each player's birth COORDINATES via point-in-polygon against
+countries_50m.geojson, so the country always matches where the pin lands. (The CSV's
+born_in is unreliable for colonial-history places — e.g. Wikidata lists France as a
+historical country for Algerian cities, so coordinate-based assignment is authoritative.)"""
 import csv, json, os
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROWS = list(csv.DictReader(open(os.path.join(HERE, "players_worldcup2026.csv"))))
 
-# optional team metadata (group / confederation / fifa code) if teams.csv is present
+NORMALIZE = {
+    "United States of America": "USA", "United States": "USA",
+    "Czech Republic": "Czechia", "Ivory Coast": "Côte d'Ivoire",
+    "Republic of the Congo": "Congo", "Democratic Republic of the Congo": "Congo DR",
+    "Iran": "IR Iran", "Turkey": "Türkiye", "Cape Verde": "Cabo Verde",
+    "Republic of Korea": "South Korea", "Korea": "South Korea",
+    "Bosnia and Herz.": "Bosnia and Herzegovina", "Kingdom of Denmark": "Denmark",
+}
+def norm(name):
+    return NORMALIZE.get((name or "").strip(), (name or "").strip())
+
+# ---- countries geojson: iso, display name, bbox, rings (for point-in-polygon) ----
+GJ = json.load(open(os.path.join(HERE, "countries_50m.geojson")))
+def feat_iso(p):
+    i = p.get("ISO_A3_EH")
+    if not i or i == "-99": i = p.get("ISO_A3")
+    return i
+
+COUNTRIES = []   # (iso, display_name, (minx,miny,maxx,maxy), polygons[list of [outer, *holes]])
+for f in GJ["features"]:
+    p = f["properties"]; g = f["geometry"]
+    polys = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+    xs=[]; ys=[]
+    for poly in polys:
+        for x,y in poly[0]: xs.append(x); ys.append(y)
+    COUNTRIES.append((feat_iso(p), norm(p.get("NAME")), (min(xs),min(ys),max(xs),max(ys)), polys))
+
+def in_ring(x, y, ring):
+    inside=False; n=len(ring); j=n-1
+    for i in range(n):
+        xi,yi=ring[i]; xj,yj=ring[j]
+        if ((yi>y)!=(yj>y)) and (x < (xj-xi)*(y-yi)/(yj-yi)+xi): inside=not inside
+        j=i
+    return inside
+
+def country_at(lng, lat):
+    for iso, name, (mnx,mny,mxx,mxy), polys in COUNTRIES:
+        if lng<mnx or lng>mxx or lat<mny or lat>mxy: continue
+        for poly in polys:
+            if in_ring(lng, lat, poly[0]) and not any(in_ring(lng,lat,h) for h in poly[1:]):
+                return iso, name
+    return None, None
+
+# team metadata
 TEAM_META = {}
 tcsv = os.path.join(HERE, "teams.csv")
 if os.path.exists(tcsv):
     for t in csv.DictReader(open(tcsv)):
-        TEAM_META[t["team_name"]] = {
-            "fifa_code": t.get("fifa_code", ""),
-            "group": t.get("group_letter", ""),
-            "confederation": t.get("confederation", ""),
-        }
+        TEAM_META[t["team_name"]] = {"fifa_code":t.get("fifa_code",""),
+            "group":t.get("group_letter",""), "confederation":t.get("confederation","")}
+
+# name -> iso (for team home countries) using the geojson + aliases
+ALIASES = {"USA":"USA","Côte d'Ivoire":"CIV","IR Iran":"IRN","Congo DR":"COD",
+    "Cabo Verde":"CPV","Türkiye":"TUR","South Korea":"KOR","Czechia":"CZE",
+    "Bosnia and Herzegovina":"BIH","England":"GBR","Scotland":"GBR","Wales":"GBR",
+    "Northern Ireland":"GBR","Curaçao":"CUW"}
+NAME2ISO = {}
+for iso,name,_,_ in COUNTRIES: NAME2ISO[name]=iso
+def iso_of(country):
+    return ALIASES.get(country) or NAME2ISO.get(country)
 
 def parse_nats(field):
-    """'Netherlands (U-15); Morocco (U-17)' -> {'Netherlands','Morocco'}"""
-    out = set()
+    out=set()
     for part in field.split(";"):
-        part = part.strip()
-        if part:
-            out.add(part.split(" (")[0].strip())
+        part=part.strip()
+        if part: out.add(part.split(" (")[0].strip())
     return out
 
 teams = defaultdict(lambda: {"players": [], "name": None})
 for r in ROWS:
-    cur = r["currently_playing_for"]
-    t = teams[cur]
-    t["name"] = cur
-    youth = parse_nats(r["ever_youth_national_team"])
-    senior = parse_nats(r["ever_senior_national_team"])
-    other_allegiance = sorted((youth | senior) - {cur})
-    born = r["born_in"]
-    p = {
-        "name": r["player_name"],
-        "pos": r["position"],
-        "club": r["club_team"],
-        "dob": r["date_of_birth"],
-        "caps": int(r["caps"]) if r["caps"].isdigit() else 0,
-        "born_in": born,
-        "born_city": r["born_city"],
-        "lat": float(r["born_lat"]) if r["born_lat"] else None,
-        "lng": float(r["born_lng"]) if r["born_lng"] else None,
+    cur = r["currently_playing_for"]; t = teams[cur]; t["name"] = cur
+    lat = float(r["born_lat"]) if r["born_lat"] else None
+    lng = float(r["born_lng"]) if r["born_lng"] else None
+    born_iso = born_name = None
+    if lat is not None:
+        born_iso, born_name = country_at(lng, lat)
+    if not born_name:                       # fallback to CSV when PIP fails / no coords
+        born_name = norm(r["born_in"]); born_iso = iso_of(born_name)
+    youth=parse_nats(r["ever_youth_national_team"]); senior=parse_nats(r["ever_senior_national_team"])
+    t["players"].append({
+        "name": r["player_name"], "pos": r["position"], "club": r["club_team"],
+        "dob": r["date_of_birth"], "caps": int(r["caps"]) if r["caps"].isdigit() else 0,
+        "born_in": born_name, "born_iso": born_iso, "born_city": r["born_city"],
+        "lat": lat, "lng": lng,
         "citizenships": [c.strip() for c in r["qualified_for_proxy_citizenship"].split(";") if c.strip()],
-        "youth_for": sorted(youth),
-        "senior_for": sorted(senior),
-        "born_abroad": bool(born) and "born abroad" in r["notes"],
-        "switched_from": other_allegiance,   # nations they played for but don't now
+        "youth_for": sorted(youth), "senior_for": sorted(senior),
+        "switched_from": sorted((youth|senior)-{cur}),
         "confidence": r["match_confidence"],
-    }
-    t["players"].append(p)
-
-out_teams = []
-for name, t in teams.items():
-    players = t["players"]
-    born_counts = Counter(p["born_in"] for p in players if p["born_in"])
-    birth_countries = sorted(born_counts)
-    n_abroad = sum(1 for p in players if p["born_abroad"])
-    switchers = [p["name"] for p in players if p["switched_from"]]
-    multi_cit = sum(1 for p in players if len(p["citizenships"]) > 1)
-    # birth countries other than the home country, with counts (for clues + reveal)
-    foreign_born_counts = {c: n for c, n in born_counts.items() if c != name}
-    out_teams.append({
-        "name": name,
-        **TEAM_META.get(name, {}),
-        "players": players,
-        "birth_countries": birth_countries,            # Game B answer key (incl. home)
-        "stats": {
-            "squad_size": len(players),
-            "n_born_abroad": n_abroad,
-            "pct_born_abroad": round(100 * n_abroad / len(players)),
-            "n_distinct_birth_countries": len(birth_countries),
-            "n_switchers": len(switchers),
-            "switchers": switchers,
-            "n_multi_citizenship": multi_cit,
-            "foreign_born_counts": foreign_born_counts,
-            "top_foreign_origin": (max(foreign_born_counts, key=foreign_born_counts.get)
-                                   if foreign_born_counts else None),
-        },
     })
 
-out_teams.sort(key=lambda t: t["name"])
+out_teams=[]
+for name,t in teams.items():
+    players=t["players"]; tiso=iso_of(name)
+    for p in players: p["born_abroad"] = bool(p["born_iso"]) and p["born_iso"]!=tiso
+    born_counts=Counter(p["born_in"] for p in players if p["born_in"])
+    birth_iso3={p["born_in"]:p["born_iso"] for p in players if p["born_in"] and p["born_iso"]}
+    n_abroad=sum(1 for p in players if p["born_abroad"])
+    switchers=[p["name"] for p in players if p["switched_from"]]
+    foreign={c:n for c,n in born_counts.items() if c!=name}
+    out_teams.append({ "name":name, "iso3":tiso or "", **TEAM_META.get(name,{}),
+        "players":players, "birth_countries":sorted(born_counts), "birth_iso3":birth_iso3,
+        "stats":{ "squad_size":len(players), "n_born_abroad":n_abroad,
+            "pct_born_abroad":round(100*n_abroad/len(players)),
+            "n_distinct_birth_countries":len(born_counts), "n_switchers":len(switchers),
+            "switchers":switchers,
+            "n_multi_citizenship":sum(1 for p in players if len(p["citizenships"])>1),
+            "foreign_born_counts":foreign,
+            "top_foreign_origin":(max(foreign,key=foreign.get) if foreign else None) } })
 
-# ---- attach ISO_A3 codes so the map can shade/match countries reliably ----
-ALIASES = {  # our display name -> ISO_A3
-    "USA": "USA", "Côte d'Ivoire": "CIV", "IR Iran": "IRN", "Congo DR": "COD",
-    "Cabo Verde": "CPV", "Türkiye": "TUR", "South Korea": "KOR", "Czechia": "CZE",
-    "Bosnia and Herzegovina": "BIH", "United Kingdom": "GBR", "Republic of Ireland": "IRL",
-    "North Macedonia": "MKD", "DR Congo": "COD", "Cape Verde": "CPV",
-    "England": "GBR", "Scotland": "GBR", "Wales": "GBR", "Northern Ireland": "GBR",
-    "Isle of Man": "GBR", "Kingdom of Denmark": "DNK", "Vatican City": "VAT",
-}
-gj = json.load(open(os.path.join(HERE, "countries_50m.geojson")))
-name_to_iso = {}
-for f in gj["features"]:
-    p = f["properties"]
-    iso = p.get("ISO_A3_EH") or p.get("ISO_A3")
-    if not iso or iso == "-99":
-        iso = p.get("ISO_A3")
-    for key in (p.get("NAME"), p.get("ADMIN"), p.get("NAME_LONG"), p.get("NAME_EN")):
-        if key:
-            name_to_iso[key] = iso
-
-def iso_of(country):
-    if country in ALIASES:
-        return ALIASES[country]
-    return name_to_iso.get(country)
-
-unmapped = set()
-for t in out_teams:
-    t["iso3"] = iso_of(t["name"]) or ""
-    if not t["iso3"]:
-        unmapped.add(t["name"])
-    t["birth_iso3"] = {}
-    for c in t["birth_countries"]:
-        code = iso_of(c)
-        if code:
-            t["birth_iso3"][c] = code
-        else:
-            unmapped.add(c)
-if unmapped:
-    print("WARNING unmapped country names (need an alias):", sorted(unmapped))
-
-data = {
-    "generated_from": "players_worldcup2026.csv",
-    "n_teams": len(out_teams),
-    "n_players": len(ROWS),
-    "teams": out_teams,
-}
-with open(os.path.join(HERE, "app_data.json"), "w") as f:
-    json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
-
-# console summary
+out_teams.sort(key=lambda t:t["name"])
+unmapped={t["name"] for t in out_teams if not t["iso3"]} | {c for t in out_teams for c in t["birth_countries"] if not iso_of(c)}
+if unmapped: print("WARNING unmapped:", sorted(unmapped))
+json.dump({"generated_from":"players_worldcup2026.csv","n_teams":len(out_teams),
+    "n_players":len(ROWS),"teams":out_teams},
+    open(os.path.join(HERE,"app_data.json"),"w"), ensure_ascii=False, separators=(",",":"))
 print(f"app_data.json: {len(out_teams)} teams, {len(ROWS)} players")
-hard = sorted(out_teams, key=lambda t: -t["stats"]["n_distinct_birth_countries"])[:5]
-print("most birth-country diversity (hardest Game B):",
-      [(t["name"], t["stats"]["n_distinct_birth_countries"]) for t in hard])
-allhome = [t["name"] for t in out_teams if t["stats"]["n_distinct_birth_countries"] == 1]
-print("entirely home-born squads:", allhome or "none")
+alg=[t for t in out_teams if t["name"]=="Algeria"][0]
+print("Algeria now:", alg["stats"]["n_born_abroad"],"/",alg["stats"]["squad_size"],
+      "born abroad; counts:", dict(Counter(p["born_in"] for p in alg["players"])))
