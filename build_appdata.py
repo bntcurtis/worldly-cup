@@ -114,7 +114,11 @@ for name,t in teams.items():
     birth_iso3={p["born_in"]:p["born_iso"] for p in players if p["born_in"] and p["born_iso"]}
     n_abroad=sum(1 for p in players if p["born_abroad"])
     switchers=[p["name"] for p in players if p["switched_from"]]
-    foreign={c:n for c,n in born_counts.items() if c!=name}
+    # "foreign" = born countries other than HOME. Compare by ISO, not display name:
+    # the home country's geojson NAME can differ from the team name (England/Scotland ->
+    # "United Kingdom", Congo DR -> "Dem. Rep. Congo"), which would otherwise leak the
+    # home-born players in as the top "foreign" origin.
+    foreign={c:n for c,n in born_counts.items() if birth_iso3.get(c)!=tiso}
     out_teams.append({ "name":name, "iso3":tiso or "", **TEAM_META.get(name,{}),
         "players":players, "birth_countries":sorted(born_counts), "birth_iso3":birth_iso3,
         "stats":{ "squad_size":len(players), "n_born_abroad":n_abroad,

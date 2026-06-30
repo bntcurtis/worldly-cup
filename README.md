@@ -48,10 +48,16 @@ systems).
    USA/United States, IR Iran/Iran, Côte d'Ivoire/Ivory Coast, Türkiye/Turkey, etc.).
 
 ## Data quality (current build)
-- **1,227 / 1,248 (98%) high-confidence.** 0 rows currently flagged `needs_review` — the
-  remaining low/medium-confidence rows (21 total) were since hand-verified outside the
-  pipeline (see `match_source = web-verified`) and no longer need attention.
-- **1,227+ players have birthplace coordinates.**
+- **1,227 / 1,248 (98%) high-confidence** (`match_confidence`: 1,227 high, 16 medium, 5 low).
+  No rows are flagged `needs_review="YES"`; the 21 low/medium rows were hand-verified outside
+  the pipeline (`match_source = web-verified`).
+- **All 1,248 players have birthplace coordinates.**
+- **39 rows carry `needs_review="fallback"`** — a capital-city *placeholder*. For these the
+  birth **country** (`born_in`) is trusted, but `born_city` / `born_lat` / `born_lng` were set
+  to the country capital because the true birth city is unknown. `build_appdata.py` surfaces
+  this as a `born_city_is_fallback` flag per player, and the app deliberately hides the
+  placeholder city (showing only the country) so it never presents a guess as fact. None of
+  these 39 players appear in the "Whose Team?" clue pool.
 
 > **⚠️ CSV vs. app_data.json — two slightly different pictures, read before trusting either:**
 > `players_worldcup2026.csv`'s own `born_in` / `notes` columns come straight from Wikidata's

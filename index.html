@@ -37,9 +37,13 @@
   /* secondary nav items (Explore, names toggle) — de-emphasized vs. the games */
   .tab.subtle{font-size:12px;color:var(--muted);opacity:.85}
   .tab.subtle:hover{opacity:1;color:var(--ink)}
+  /* when a subtle tab is active it shares the light-blue pill of .tab.active; force dark, full-opacity
+     text so it stays readable (same specificity as .tab.subtle but later in source order) */
+  .tab.subtle.active{color:#08243a;opacity:1;font-weight:700}
   .navsep{width:1px;height:20px;background:var(--line)}
 
   .panel{position:absolute;top:70px;left:16px;width:340px;max-width:calc(100vw - 32px);
+    max-height:calc(100dvh - 86px);overflow-y:auto;overscroll-behavior:contain;
     background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border:1px solid var(--line);border-radius:18px;padding:16px;z-index:6;
     box-shadow:0 18px 50px rgba(0,0,0,.45)}
@@ -90,12 +94,41 @@
   .peg img{width:28px;height:46px;display:block}
   .peg .badge{position:absolute;top:-6px;right:-9px;background:var(--accent);color:#06243b;font-weight:800;
     border:1.5px solid #fff;border-radius:11px;font-size:11px;line-height:16px;min-width:18px;text-align:center;padding:0 3px}
-  @media (max-width:560px){ .panel{width:calc(100vw - 24px);left:12px;top:62px} .brand small{display:none} }
+
+  /* loading + fatal-error overlays */
+  #loading{position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:14px;letter-spacing:.3px}
+  #loading .ball{width:28px;height:28px;margin-right:11px;border:3px solid var(--line);border-top-color:var(--accent);
+    border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #fatal{position:absolute;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:rgba(8,23,38,.92)}
+  #fatal .fatal-card{max-width:340px;text-align:center;background:var(--panel-solid);border:1px solid var(--line);
+    border-radius:16px;padding:22px 20px;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  #fatal h3{margin:0 0 8px;font-size:17px} #fatal p{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0 0 14px}
+  #fatal button{width:100%}
+  @media (max-width:600px){
+    /* topbar reflows instead of clipping: brand + secondary nav on row 1, game tabs full-width on row 2 */
+    .topbar{height:auto;flex-wrap:wrap;padding:7px 10px;gap:6px;
+      background:linear-gradient(180deg,rgba(8,23,38,.98),rgba(8,23,38,.92))}
+    .brand{font-size:17px;gap:7px}
+    .brand .logo{width:24px;height:24px}
+    .navright{margin-left:auto;gap:8px}
+    .navsep{display:none}
+    .tabs{order:3;width:100%;justify-content:space-between;gap:4px}
+    .tabs .tab{flex:1;text-align:center;font-size:12px;padding:8px 6px}
+    .tab.subtle{font-size:11.5px;padding:7px 8px}
+    .panel{width:calc(100vw - 20px);left:10px;top:calc(var(--barh,92px) + 6px);
+      max-height:calc(100dvh - var(--barh,92px) - 24px)}
+    .legend{font-size:11px;padding:8px 10px;left:10px;bottom:10px}
+    .maplibregl-ctrl button{width:34px!important;height:34px!important}
+  }
 </style>
 </head>
 <body>
 <div id="map"></div>
 <div id="tt"></div>
+<div id="loading"><span class="ball"></span>Loading WorldlyCup…</div>
 <div class="topbar">
   <div class="brand"><img class="logo" src="logo.png" alt="WorldlyCup logo">WorldlyCup</div>
   <div class="tabs">
@@ -188,22 +221,41 @@
 </div>
 
 <script>
+const APP_VERSION = '2026.06.30';   // bump on each data/app deploy to bust the asset cache
 const ISO = f => { const p=f.properties; let i=p.ISO_A3_EH; if(!i||i==='-99') i=p.ISO_A3; return i; };
 const POS = {GK:'Goalkeeper',DEF:'Defender',MID:'Midfielder',FWD:'Forward',FW:'Forward',ATT:'Forward'};
-const TODAY = new Date('2026-06-29');
+// Fixed tournament reference date — player ages are quoted "as of the 2026 World Cup",
+// so this is intentionally frozen rather than `new Date()` (keeps clue ages stable for everyone).
+const AGE_REFERENCE_DATE = new Date('2026-06-29');
+// escape data-derived strings before they go into innerHTML (names/clubs can contain & < > ")
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let MAP, DATA, GEO, FEAT_BY_ISO={}, mode='game', markers=[];
 let TEAM_BY_ISO={}, POOL=[], used=new Set(), HI={}, hoverOn=false;
 let round=null, score=0, solved=0, played=0;
-let fround=null, fscore=0, fdone=0, flives=3;
+let fround=null, fscore=0, fdone=0, flives=3, fused=new Set();
 let gstate=null, gscore=0, gsolved=0, gplayed=0, gused=new Set();
 
-const age = dob => { const d=new Date(dob); let a=TODAY.getFullYear()-d.getFullYear();
-  if(TODAY.getMonth()<d.getMonth()||(TODAY.getMonth()==d.getMonth()&&TODAY.getDate()<d.getDate())) a--; return a; };
+const age = dob => { const d=new Date(dob); let a=AGE_REFERENCE_DATE.getFullYear()-d.getFullYear();
+  if(AGE_REFERENCE_DATE.getMonth()<d.getMonth()||(AGE_REFERENCE_DATE.getMonth()==d.getMonth()&&AGE_REFERENCE_DATE.getDate()<d.getDate())) a--; return a; };
+
+// fitBounds padding that adapts to screen: on phones the panel sits across the TOP (full width),
+// on desktop it's a ~340px column on the LEFT. Desktop's left:380 would exceed a phone's width
+// (MapLibre then silently refuses to reframe), so reserve top space on narrow screens instead.
+function mapPadding(){
+  const c=MAP.getCanvas(), w=c.clientWidth, h=c.clientHeight;
+  if(w<=560){
+    const panel=[...document.querySelectorAll('.panel')].find(p=>p.offsetParent!==null);
+    const reserve=panel ? Math.min(panel.getBoundingClientRect().bottom+16, h*0.55) : Math.min(260,h*0.55);
+    return {top:reserve, bottom:28, left:18, right:18};
+  }
+  return {top:90, bottom:70, left:380, right:60};
+}
 
 async function init(){
+  if(typeof maplibregl==='undefined') throw new Error('The map library failed to load.');
   [GEO, DATA] = await Promise.all([
-    fetch('countries_50m.geojson').then(r=>r.json()),
-    fetch('app_data.json?v='+Date.now()).then(r=>r.json())   // avoid stale cached data
+    fetch('countries_50m.geojson?v='+APP_VERSION).then(r=>{ if(!r.ok) throw new Error('countries_50m.geojson '+r.status); return r.json(); }),
+    fetch('app_data.json?v='+APP_VERSION).then(r=>{ if(!r.ok) throw new Error('app_data.json '+r.status); return r.json(); })
   ]);
   GEO.features.forEach(f=>{ f.id = ISO(f); FEAT_BY_ISO[f.id]=f; });
   DATA.teams.forEach(t=>{ if(t.iso3) TEAM_BY_ISO[t.iso3]=t; });
@@ -234,13 +286,20 @@ async function init(){
     const sel=document.getElementById('team');
     DATA.teams.forEach(t=>{ const o=document.createElement('option'); o.value=t.name;
       o.textContent=`${t.name}  (${t.stats.n_born_abroad}/${t.stats.squad_size} born abroad)`; sel.appendChild(o); });
+    const ld=document.getElementById('loading'); if(ld) ld.remove();
+    syncBar();
     newRound();   // open straight into a game — the games are the focus
   });
   // map click routes to the active game
   MAP.on('click','country-fill', e=>{ if(!e.features[0]) return;
-    if(mode==='game') onGuess(e.features[0].id, e.features[0].properties.NAME);
-    else if(mode==='guess') onGuessTeam(e.features[0].id, e.features[0].properties.NAME);
-    else if(mode==='find') onFindGuess(e.features[0].id); });
+    const f=e.features[0];
+    // touch devices emit no mousemove, so surface the tapped country name here too (easy mode)
+    if(hoverOn){ const tt=document.getElementById('tt'); tt.textContent=f.properties.NAME;
+      tt.style.left=(e.point.x+14)+'px'; tt.style.top=e.point.y+'px'; tt.style.display='block';
+      clearTimeout(tt._t); tt._t=setTimeout(()=>{ tt.style.display='none'; },1400); }
+    if(mode==='game') onGuess(f.id, f.properties.NAME);
+    else if(mode==='guess') onGuessTeam(f.id, f.properties.NAME);
+    else if(mode==='find') onFindGuess(f.id); });
   // hover tooltip with country name
   const tt=document.getElementById('tt');
   MAP.on('mousemove','country-fill', e=>{ const f=e.features[0]; if(!f) return;
@@ -262,7 +321,7 @@ async function init(){
   document.getElementById('gskip').onclick=()=>revealGuess(false,'skip');
   document.getElementById('fhint').onclick=findHint;
   document.getElementById('fskip').onclick=()=>endFindRound(false,'skip');
-  document.getElementById('fnext').onclick=()=>{ if(flives<=0){ fscore=0; fdone=0; flives=3; } newFindRound(); };
+  document.getElementById('fnext').onclick=()=>{ if(flives<=0){ fscore=0; fdone=0; flives=3; fused.clear(); } newFindRound(); };
 }
 
 /* ---------- highlight layer (reliable replacement for feature-state) ---------- */
@@ -291,11 +350,14 @@ function dropPin(p, group){
   const n=group?group.length:1;
   if(n>1){ const b=document.createElement('div'); b.className='badge'; b.textContent=n; el.appendChild(b); }
   const list=(group||[p]);
-  const rows=list.map(q=>{ const sw=q.switched_from&&q.switched_from.length?`<div style="color:var(--teal);font-size:11.5px">↪ also: ${q.switched_from.join(', ')}</div>`:'';
-    return `<div style="margin:2px 0"><b>${q.name}</b> <span style="color:var(--muted)">· ${POS[q.pos]||q.pos} · ${q.club}</span>${sw}</div>`; }).join('');
+  const rows=list.map(q=>{ const sw=q.switched_from&&q.switched_from.length?`<div style="color:var(--teal);font-size:11.5px">↪ also: ${esc(q.switched_from.join(', '))}</div>`:'';
+    return `<div style="margin:2px 0"><b>${esc(q.name)}</b> <span style="color:var(--muted)">· ${esc(POS[q.pos]||q.pos)} · ${esc(q.club)}</span>${sw}</div>`; }).join('');
+  // header: show the city only when it's a verified birth city; fallback rows use a capital-city
+  // placeholder, so for those we show the country alone rather than presenting a guess as fact
+  const place=(p.born_city && !p.born_city_is_fallback) ? `${esc(p.born_city)}, ${esc(p.born_in)}` : esc(p.born_in);
   // anchor the SW (bottom-left) corner — the pegman's pointed base/ball tip — at the exact coordinate
   const popup=new maplibregl.Popup({offset:[14,-44],closeButton:false}).setHTML(
-    `<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${p.born_city||''}, ${p.born_in}</div><div style="margin-top:6px">${rows}</div>`);
+    `<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${place}</div><div style="margin-top:6px">${rows}</div>`);
   markers.push(new maplibregl.Marker({element:el,anchor:'bottom-left'}).setLngLat([p.lng,p.lat]).setPopup(popup).addTo(MAP));
 }
 
@@ -331,12 +393,12 @@ function revealTeam(name){
     (groups[k]=groups[k]||{lat:p.lat,lng:p.lng,city:p.born_city,country:p.born_in,players:[]}).players.push(p); });
   const bounds=new maplibregl.LngLatBounds();
   Object.values(groups).forEach(g=>{ dropPin(g.players[0], g.players); bounds.extend([g.lng,g.lat]); });
-  if(!bounds.isEmpty()) MAP.fitBounds(bounds,{padding:{top:90,bottom:60,left:380,right:60},maxZoom:5,duration:900});
+  if(!bounds.isEmpty()) MAP.fitBounds(bounds,{padding:mapPadding(),maxZoom:5,duration:900});
   const s=team.stats, st=document.getElementById('stat');
-  const chips=Object.entries(s.foreign_born_counts).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<span class="chip">${c} <span class="n">${n}</span></span>`).join('');
+  const chips=Object.entries(s.foreign_born_counts).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<span class="chip">${esc(c)} <span class="n">${n}</span></span>`).join('');
   document.getElementById('exploreHint').style.display='none';
   st.style.display='block';
-  st.innerHTML=`<b>${team.name}</b> — <b>${s.n_born_abroad}/${s.squad_size}</b> born abroad (${s.pct_born_abroad}%), across <b>${s.n_distinct_birth_countries}</b> countries.`
+  st.innerHTML=`<b>${esc(team.name)}</b> — <b>${s.n_born_abroad}/${s.squad_size}</b> born abroad (${s.pct_born_abroad}%), across <b>${s.n_distinct_birth_countries}</b> countries.`
     +`${s.n_switchers?`<br><b>${s.n_switchers}</b> previously played for another nation.`:''}${chips?`<div class="chips">${chips}</div>`:''}`;
 }
 
@@ -344,11 +406,12 @@ function revealTeam(name){
 function highlightTeams(){ clearHi(); DATA.teams.forEach(t=>{ if(t.iso3) HI[t.iso3]='team'; }); renderHi(); }
 
 function buildClues(p, team){
-  const c=[['Born in', `${p.born_city?p.born_city+', ':''}${p.born_in}`],
-           ['Profile', `${POS[p.pos]||p.pos}, ${age(p.dob)} years old`]];
-  if(p.youth_for.length) c.push(['Youth career', `Played youth international football for ${p.youth_for.join(', ')}`]);
-  if(p.citizenships.length>1) c.push(['Eligibility', `Holds citizenship of ${p.citizenships.join(', ')}`]);
-  c.push(['Club', `Plays his club football for ${p.club}`]);
+  const birthplace = (p.born_city && !p.born_city_is_fallback) ? `${esc(p.born_city)}, ${esc(p.born_in)}` : esc(p.born_in);
+  const c=[['Born in', birthplace],
+           ['Profile', `${esc(POS[p.pos]||p.pos)}, ${age(p.dob)} years old`]];
+  if(p.youth_for.length) c.push(['Youth career', `Played youth international football for ${esc(p.youth_for.join(', '))}`]);
+  if(p.citizenships.length>1) c.push(['Eligibility', `Holds citizenship of ${esc(p.citizenships.join(', '))}`]);
+  c.push(['Club', `Plays his club football for ${esc(p.club)}`]);
   return c;
 }
 
@@ -390,7 +453,7 @@ function onGuess(iso, name){
   } else {
     round.wrongs++; updateLives();
     setHi(iso,'wrong');                                   // bold red, obvious
-    setTimeout(()=>{ if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
+    const r=round; setTimeout(()=>{ if(round!==r||mode!=='game') return; if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
     const left=3-round.wrongs;
     document.getElementById('flash').textContent = left>0
       ? `❌ Not ${name||'there'} — they don't play for that country. ${left} ${left===1?'guess':'guesses'} left.`
@@ -406,7 +469,7 @@ function endRound(win, pts){
   const b=new maplibregl.LngLatBounds();
   if(p.lng!=null) b.extend([p.lng,p.lat]);
   const cp=countryPoint(team.iso3); if(cp) b.extend(cp);
-  if(!b.isEmpty()) MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
+  if(!b.isEmpty()) MAP.fitBounds(b,{padding:mapPadding(),maxZoom:5,duration:900});
   document.getElementById('score').textContent=score;
   document.getElementById('solved').textContent=solved;
   document.getElementById('played').textContent=played;
@@ -414,24 +477,38 @@ function endRound(win, pts){
   document.getElementById('nextBtn').style.display='';
   document.getElementById('gameHint').style.display='none';
   document.getElementById('flash').textContent='';
-  const story = p.born_in!==team.name ? `Born in <b>${p.born_in}</b>, plays for <b>${team.name}</b>.` : `Plays for <b>${team.name}</b>.`;
-  const sw = p.switched_from.length? ` Earlier represented ${p.switched_from.join(', ')}.`:'';
+  const story = p.born_in!==team.name ? `Born in <b>${esc(p.born_in)}</b>, plays for <b>${esc(team.name)}</b>.` : `Plays for <b>${esc(team.name)}</b>.`;
+  const sw = p.switched_from.length? ` Earlier represented ${esc(p.switched_from.join(', '))}.`:'';
   const r=document.getElementById('result');
   r.className='result '+(win?'win':'lose'); r.style.display='block';
-  r.innerHTML = (win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${team.name}</b><br>`)+`It was <b>${p.name}</b>. ${story}${sw}`;
+  r.innerHTML = (win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`❌ <b>${esc(team.name)}</b><br>`)+`It was <b>${esc(p.name)}</b>. ${story}${sw}`;
 }
 
 /* ---------- GUESS THE TEAM (progressive clues) ---------- */
 const CONF={UEFA:'Europe (UEFA)',CONMEBOL:'South America (CONMEBOL)',CONCACAF:'North & Central America (CONCACAF)',CAF:'Africa (CAF)',AFC:'Asia (AFC)',OFC:'Oceania (OFC)'};
+function topClub(team){
+  const cnt={}; team.players.forEach(p=>{ if(p.club) cnt[p.club]=(cnt[p.club]||0)+1; });
+  let best=null; for(const name in cnt){ if(!best||cnt[name]>best.n) best={name,n:cnt[name]}; }
+  return (best && best.n>=2) ? best : null;
+}
 function buildTeamClues(team){
   const s=team.stats, c=[];
-  if(team.confederation) c.push(['Confederation', `They qualified through ${CONF[team.confederation]||team.confederation}.`]);
-  c.push(['Squad spread', `Its 26 players were born across ${s.n_distinct_birth_countries} different countr${s.n_distinct_birth_countries===1?'y':'ies'}.`]);
-  c.push(['Born abroad', s.n_born_abroad===0
-    ? `Every single player was born at home — a rarity at this World Cup.`
-    : `${s.pct_born_abroad}% of the squad (${s.n_born_abroad} of ${s.squad_size}) were born abroad.`]);
+  if(team.confederation) c.push(['Confederation', `They qualified through ${esc(CONF[team.confederation]||team.confederation)}.`]);
+  // Origin spread, phrased naturally. For an all-home squad this already says "nobody born abroad",
+  // so we deliberately DON'T also add the (redundant) "born abroad" clue below.
+  if(s.n_born_abroad===0)
+    c.push(['Squad origins', `All ${s.squad_size} players were born in their home country — a rarity at this World Cup.`]);
+  else{
+    c.push(['Squad origins', `Its ${s.squad_size} players were born across ${s.n_distinct_birth_countries} different countries.`]);
+    c.push(['Born abroad', `${s.pct_born_abroad}% of the squad (${s.n_born_abroad} of ${s.squad_size}) were born abroad.`]);
+  }
   if(s.n_switchers) c.push(['Allegiance', `${s.n_switchers} of its players previously represented a different nation at some level.`]);
-  if(s.top_foreign_origin) c.push(['Top origin', `${s.foreign_born_counts[s.top_foreign_origin]} of its players were born in ${s.top_foreign_origin}.`]);
+  if(s.top_foreign_origin){ const n=s.foreign_born_counts[s.top_foreign_origin];
+    c.push(['Top foreign origin', `${n} of its players ${n===1?'was':'were'} born in ${esc(s.top_foreign_origin)}.`]); }
+  // squad-based facts: keep all-home teams from running out of clues, and give one near-giveaway last
+  const club=topClub(team); if(club) c.push(['Squad base', `More of its players turn out for ${esc(club.name)} (${club.n}) than any other club.`]);
+  const star=team.players.reduce((a,b)=>((b.caps||0)>(a.caps||0)?b:a), team.players[0]);
+  if(star) c.push(['Star man', `Its most-capped player is ${esc(star.name)} (${star.caps} ${star.caps===1?'cap':'caps'}).`]);
   return c;   // vague → specific
 }
 function gRoundPoints(){ return Math.max(10, 100 - 20*(gstate.shown-1) - 20*gstate.misses); }
@@ -472,7 +549,7 @@ function onGuessTeam(iso, name){
   } else {
     gstate.misses++; updateGMisses();
     setHi(iso,'wrong');
-    setTimeout(()=>{ if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
+    const g=gstate; setTimeout(()=>{ if(gstate!==g||mode!=='guess') return; if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
     const left=3-gstate.misses;
     document.getElementById('gflash').textContent = left>0
       ? `❌ Not ${name||'there'} — keep scouting. ${left} ${left===1?'guess':'guesses'} left.` : '';
@@ -482,15 +559,16 @@ function onGuessTeam(iso, name){
 
 function revealGuess(win, reason, pts){
   gstate.done=true; const team=gstate.team;
+  if(reason==='skip') gplayed++;   // Reveal ends the round too — count it as played (win/loss already counted in onGuessTeam)
   setHi(team.iso3,'correct');
   // reveal the diaspora: pegman pins for every player's birthplace, grouped by city
   const groups={};
   team.players.forEach(p=>{ if(p.lat==null) return; const k=p.lat.toFixed(2)+','+p.lng.toFixed(2);
     (groups[k]=groups[k]||{lat:p.lat,lng:p.lng,city:p.born_city,born_in:p.born_in,players:[]}).players.push(p); });
   const b=new maplibregl.LngLatBounds();
-  Object.values(groups).forEach(g=>{ dropPin({lat:g.lat,lng:g.lng,born_city:g.city,born_in:g.born_in}, g.players); b.extend([g.lng,g.lat]); });
+  Object.values(groups).forEach(g=>{ dropPin({lat:g.lat,lng:g.lng,born_city:g.city,born_in:g.born_in,born_city_is_fallback:g.players[0].born_city_is_fallback}, g.players); b.extend([g.lng,g.lat]); });
   const cp=countryPoint(team.iso3); if(cp) b.extend(cp);
-  if(!b.isEmpty()) MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
+  if(!b.isEmpty()) MAP.fitBounds(b,{padding:mapPadding(),maxZoom:5,duration:900});
   document.getElementById('gscore').textContent=gscore;
   document.getElementById('gsolved').textContent=gsolved;
   document.getElementById('gplayed').textContent=gplayed;
@@ -502,15 +580,17 @@ function revealGuess(win, reason, pts){
   const s=team.stats;
   const r=document.getElementById('gresult');
   r.className='result '+(win?'win':'lose'); r.style.display='block';
-  r.innerHTML=(win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`📋 <b>It was ${team.name}.</b><br>`)
-    +`${team.name} — ${s.n_born_abroad}/${s.squad_size} born abroad${s.top_foreign_origin?`, most from ${s.top_foreign_origin}`:''}.`;
+  r.innerHTML=(win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`📋 <b>It was ${esc(team.name)}.</b><br>`)
+    +`${esc(team.name)} — ${s.n_born_abroad}/${s.squad_size} born abroad${s.top_foreign_origin?`, most from ${esc(s.top_foreign_origin)}`:''}.`;
 }
 
 /* ---------- BIRTHPLACE HUNT ---------- */
 function updateFLives(){ document.getElementById('flives').textContent='●'.repeat(Math.max(0,flives))+'○'.repeat(3-flives); }
 
 function newFindRound(){
-  const team = DATA.teams[Math.floor(Math.random()*DATA.teams.length)];
+  let team,guard=0;
+  do{ team=DATA.teams[Math.floor(Math.random()*DATA.teams.length)]; guard++; } while(fused.has(team.name)&&guard<200);
+  fused.add(team.name); if(fused.size>=DATA.teams.length) fused.clear();
   const answer = new Set(Object.values(team.birth_iso3));
   fround={ team, answer, found:new Set(), strikes:0, done:false, hinted:false };
   clearHi(); clearMarkers();
@@ -550,7 +630,7 @@ function onFindGuess(iso){
     fround.strikes++;
     document.getElementById('fstrikes').textContent='●'.repeat(fround.strikes)+'○'.repeat(3-fround.strikes);
     setHi(iso,'wrong');
-    setTimeout(()=>delHi(iso),700);
+    const fr=fround; setTimeout(()=>{ if(fround!==fr||mode!=='find') return; delHi(iso); },700);
     const left=3-fround.strikes;
     document.getElementById('fflash').textContent = left>0 ? `❌ No player born there. ${left} ${left===1?'miss':'misses'} left.` : '';
     if(fround.strikes>=3) endFindRound(false,'strikeout');
@@ -558,13 +638,17 @@ function onFindGuess(iso){
 }
 
 function findHint(){ if(!fround||fround.done) return;
-  fround.hinted=true; document.getElementById('ftotal').textContent=' / '+fround.answer.size;
+  fround.hinted=true; const n=fround.answer.size;
+  document.getElementById('ftotal').textContent=' / '+n;
+  document.getElementById('fflash').textContent=`💡 This squad was born across ${n} ${n===1?'country':'countries'} (including home).`;
   document.getElementById('fhint').disabled=true; }
 
 function endFindRound(win, reason){
   fround.done=true;
   fround.answer.forEach(iso=>{ if(!fround.found.has(iso)) HI[iso]='origin'; }); renderHi();
-  let pts=fround.found.size*10 + (win && fround.strikes===0 ? 25 : 0);
+  // Skipping forfeits the round's points (otherwise you could partial-solve then skip to farm score
+  // with no risk to your lives). Completing or striking out still banks what you found.
+  let pts = reason==='skip' ? 0 : fround.found.size*10 + (win && fround.strikes===0 ? 25 : 0);
   fscore+=pts; if(win) fdone++;
   if(reason==='strikeout'){ flives--; updateFLives(); }
   document.getElementById('fscore').textContent=fscore;
@@ -581,11 +665,33 @@ function endFindRound(win, reason){
   else if(flives<=0){ r.className='result lose'; r.innerHTML=`📣 <b>Final whistle.</b> Final score <span class="pts">${fscore}</span> · ${fdone} teams completed.`; document.getElementById('fnext').textContent='Play again'; }
   else { r.className='result lose'; r.innerHTML=`${reason==='skip'?'👁 <b>Revealed.</b>':'❌ <b>Three misses.</b>'} ${missed} birthplace${missed===1?'':'s'} left (shown teal).${reason==='strikeout'?' Lost a life.':''}`; }
   r.style.display='block';
+  // reveal the squad's actual birthplaces as pins (grouped by city), like the other modes
+  clearMarkers();
+  const groups={};
+  fround.team.players.forEach(p=>{ if(p.lat==null) return; const k=p.lat.toFixed(2)+','+p.lng.toFixed(2);
+    (groups[k]=groups[k]||{lat:p.lat,lng:p.lng,city:p.born_city,born_in:p.born_in,players:[]}).players.push(p); });
+  Object.values(groups).forEach(g=>dropPin({lat:g.lat,lng:g.lng,born_city:g.city,born_in:g.born_in,born_city_is_fallback:g.players[0].born_city_is_fallback}, g.players));
   const b=new maplibregl.LngLatBounds();
   fround.team.players.forEach(pl=>{ if(pl.lng!=null) b.extend([pl.lng,pl.lat]); });
-  if(!b.isEmpty()) MAP.fitBounds(b,{padding:{top:90,bottom:70,left:380,right:60},maxZoom:5,duration:900});
+  if(!b.isEmpty()) MAP.fitBounds(b,{padding:mapPadding(),maxZoom:5,duration:900});
 }
-init();
+
+// keep the panel below the topbar even when the bar wraps to 2+ rows on small screens
+function syncBar(){ const tb=document.querySelector('.topbar');
+  if(tb) document.documentElement.style.setProperty('--barh', tb.offsetHeight+'px'); }
+window.addEventListener('resize', syncBar);
+
+function showFatal(err){
+  console.error('WorldlyCup failed to start:', err);
+  const ld=document.getElementById('loading'); if(ld) ld.remove();
+  if(document.getElementById('fatal')) return;
+  const d=document.createElement('div'); d.id='fatal';
+  d.innerHTML=`<div class="fatal-card"><h3>⚽ Couldn’t load WorldlyCup</h3>
+    <p>The game data or map couldn’t be loaded. Check your connection and try again.</p>
+    <button class="primary" onclick="location.reload()">Retry</button></div>`;
+  document.body.appendChild(d);
+}
+init().catch(showFatal);
 </script>
 </body>
 </html>

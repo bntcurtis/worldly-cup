@@ -117,7 +117,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 116,Tanitoluwa Oluwatimilehin Oluwaseyi,2000-05-15,FWD,Villarreal CF,25,Canada,Nigeria,Abuja,9.05556,7.49139,Nigeria,Canada,,Q113564288,high,wikidata-name+dob,,born abroad
 117,Derek Austin Cornelius,1997-11-25,DEF,Rangers FC,45,Canada,Canada,Ajax,43.85833,-79.03639,Canada; Jamaica,Canada,,Q29901014,high,wikidata-name+dob,,
 118,Jacob Everett Shaffelburg,1999-11-26,MID,LAFC,32,Canada,Canada,Port Williams,45.0978,-64.4094,Canada,Canada,,Q64009768,high,wikidata-name+dob,,
-119,Moïse Bombito Bombito,2000-03-30,DEF,OGC Nice,20,Canada,Canada,Montreal,45.50334,-73.58684,Canada,Canada,,Q116146104,high,wikidata-name+dob,,
+119,Moïse Bombito,2000-03-30,DEF,OGC Nice,20,Canada,Canada,Montreal,45.50334,-73.58684,Canada,Canada,,Q116146104,high,wikidata-name+dob,,
 120,Maxime Crepeau,1994-05-11,GK,Orlando City SC,33,Canada,Canada,Greenfield Park,45.4833,-73.45,Canada,Canada,Canada (U-17); Canada (U-20),Q19866530,high,wikidata-name+dob,,
 121,Tajon Trevor Buchanan,1999-02-08,FWD,Villarreal CF,61,Canada,Canada,Brampton,43.68333,-79.76667,Canada,Canada,,Q62016194,high,wikidata-name+dob,,
 122,Owen Olamidayo Goodman,2003-11-27,GK,Barnsley,0,Canada,United Kingdom,Harold Wood,51.592,0.2313,England; Canada,Canada,,Q119079226,high,wikidata-name+dob,,born abroad
@@ -163,10 +163,10 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 162,Hatim Abdulaziz Hatem,1990-10-28,MID,Al Rayyan SC,132,Qatar,Qatar,Doha,25.28611,51.52944,Qatar,Qatar,Qatar (U-23),Q4665805,medium,web-verified,NO,"DOB corrected to 1990-10-28 (was placeholder 1990-01-01); Qatar captain, born Doha; youth Qatar U-23."
 163,Alaaeldin Ahmed,1993-01-31,FWD,Al Rayyan SC,78,Qatar,Egypt,Ismailia,30.58333,32.26667,Qatar,Qatar,Qatar (U-20); Qatar (U-23),Q4695740,high,wikidata-name+dob,,born abroad
 164,Junior Edmilson,1994-08-19,FWD,Al Duhail SC,17,Qatar,Belgium,Liège,50.63972,5.57056,Brazil; Belgium; Qatar,,,Q1957458,high,wikidata-name+dob,,born abroad
-165,Mohammed Mohammed Muntari,1993-12-20,FWD,Al Gharafa SC,74,Qatar,Ghana,Kumasi,6.7,-1.625,Ghana; Qatar,Qatar,,Q18705783,high,wikidata-name+dob,,born abroad
+165,Mohammed Muntari,1993-12-20,FWD,Al Gharafa SC,74,Qatar,Ghana,Kumasi,6.7,-1.625,Ghana; Qatar,Qatar,,Q18705783,high,wikidata-name+dob,,born abroad
 166,Khalid Hassan Alhaydos,1990-12-11,FWD,Al Sadd SC,190,Qatar,Qatar,Doha,25.28611,51.52944,Qatar,Qatar,Qatar (U-20); Qatar (U-23),Q5679556,high,wikipedia-squad,,
 167,Hassan Akram,1996-11-18,FWD,Al Sadd SC,137,Qatar,Qatar,Doha,25.28611,51.52944,Qatar,Qatar,Qatar (U-20); Qatar (U-23),Q19882804,high,wikidata-name+dob,,
-168,Karim Karim Boudiaf,1990-09-16,MID,Al Duhail SC,129,Qatar,France,Rueil-Malmaison,48.87778,2.18833,France; Qatar,Qatar,,Q3812986,high,wikidata-name+dob,,born abroad
+168,Karim Boudiaf,1990-09-16,MID,Al Duhail SC,129,Qatar,France,Rueil-Malmaison,48.87778,2.18833,France; Qatar,Qatar,,Q3812986,high,wikidata-name+dob,,born abroad
 169,Mohamed Ayoub Aloui,2005-03-11,DEF,Al Gharafa SC,8,Qatar,Qatar,Doha,25.2854,51.531,Qatar,,,Q139770039,high,wikipedia-squad,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 170,Elamin Homam,1999-08-25,DEF,Cultural Leonesa,77,Qatar,Qatar,Doha,25.28611,51.52944,Qatar,Qatar,Qatar (U-20); Qatar (U-23),Q64364375,high,wikipedia-squad,,
 171,Abdurisag Yusuf Abdurisag,1999-08-06,FWD,Al Wakrah SC,45,Qatar,Qatar,Doha,25.2854,51.531,Qatar,Qatar,Qatar (U-20); Qatar (U-23),Q64211871,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
@@ -209,27 +209,27 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 208,Cedric Jan Itten,1996-12-27,FWD,Fortuna Düsseldorf,15,Switzerland,Switzerland,Basel,47.56056,7.59056,Switzerland,,Switzerland (U-19); Switzerland (U-20); Switzerland (U-21),Q22965497,high,wikidata-name+dob,,
 209,Ramsés Alisson,1992-10-02,GK,Liverpool FC,79,Brazil,Brazil,Novo Hamburgo,-29.67778,-51.13083,Brazil,Brazil,Brazil (U-17); Brazil (U-20),Q18237361,high,wikidata-name+dob,,
 210,José Ederson Silva,1999-07-07,MID,Atalanta Bergamo,3,Brazil,Brazil,Campo Grande,-20.46861,-54.62222,Brazil,,,Q59150057,high,wikidata-name+dob,,
-211,Gabriel Gabriel Magalhaes,1997-12-19,DEF,Arsenal FC,18,Brazil,Brazil,São Paulo,-23.55039,-46.63395,Brazil,Brazil,Brazil (U-20); Brazil (U-23),Q25175970,high,wikidata-name+dob,,
+211,Gabriel Magalhaes,1997-12-19,DEF,Arsenal FC,18,Brazil,Brazil,São Paulo,-23.55039,-46.63395,Brazil,Brazil,Brazil (U-20); Brazil (U-23),Q25175970,high,wikidata-name+dob,,
 212,MARQUINHOSMarcos,1994-05-14,DEF,Paris Saint-Germain,106,Brazil,Brazil,São Paulo,-23.55039,-46.63395,Brazil; Portugal,Brazil,Brazil (U-17); Brazil (U-20); Brazil (U-23),Q39230,high,wikipedia-squad,,
 213,Henrique,1992-02-23,MID,Manchester United FC,87,Brazil,Brazil,São José dos Campos,-23.17889,-45.88694,Brazil,Brazil,Brazil (U-17); Brazil (U-20),Q616664,high,wikipedia-squad,,
 214,Sandro Alex,1991-01-26,DEF,CR Flamengo,45,Brazil,Brazil,Catanduva,-21.13778,-48.97278,Brazil,Brazil,Brazil (U-20); Brazil (U-23),Q551192,high,wikidata-name+dob,,
 215,José Vinicius,2000-07-12,FWD,Real Madrid C. F.,50,Brazil,Brazil,São Gonçalo,-22.82694,-43.05389,Brazil; Spain,Brazil,Brazil (U-15); Brazil (U-17); Brazil (U-20),Q28973866,high,wikidata-name+dob,,
 216,GUIMARAESBruno Bruno,1997-11-16,MID,Newcastle United FC,44,Brazil,Brazil,Rio de Janeiro,-22.91111,-43.20556,Brazil; Spain,Brazil,Brazil (U-23),Q58323172,high,wikipedia-squad,,
-217,Matheus Matheus Cunha,1999-05-27,FWD,Manchester United FC,24,Brazil,Brazil,João Pessoa,-7.12,-34.88,Brazil,Brazil,Brazil (U-23),Q35831063,high,wikidata-name+dob,,
-218,Neymar Neymar Jr,1992-02-05,FWD,Santos FC,128,Brazil,Brazil,Mogi das Cruzes,-23.52278,-46.19306,Brazil,Brazil,Brazil (U-17); Brazil (U-20); Brazil (U-23),Q142794,high,wikidata-name+dob,,
+217,Matheus Cunha,1999-05-27,FWD,Manchester United FC,24,Brazil,Brazil,João Pessoa,-7.12,-34.88,Brazil,Brazil,Brazil (U-23),Q35831063,high,wikidata-name+dob,,
+218,Neymar Jr,1992-02-05,FWD,Santos FC,128,Brazil,Brazil,Mogi das Cruzes,-23.52278,-46.19306,Brazil,Brazil,Brazil (U-17); Brazil (U-20); Brazil (U-23),Q142794,high,wikidata-name+dob,,
 219,Raphael Raphinha,1996-12-14,FWD,FC Barcelona,40,Brazil,Brazil,Porto Alegre,-30.03278,-51.23,Brazil,Brazil,,Q28861547,high,wikipedia-squad,,
-220,Weverton Weverton,1987-12-13,GK,Grêmio FBPA,11,Brazil,Bolivia,Rio Branco,-9.97806,-67.81167,Brazil,,,Q8040741,high,wikipedia-squad,,born abroad
+220,Weverton,1987-12-13,GK,Grêmio FBPA,11,Brazil,Bolivia,Rio Branco,-9.97806,-67.81167,Brazil,,,Q8040741,high,wikipedia-squad,,born abroad
 221,Luiz Danilo,1991-07-15,DEF,CR Flamengo,71,Brazil,Brazil,Bicas,-21.725,-43.05889,Brazil,Brazil,Brazil (U-20); Brazil (U-23),Q437329,high,wikidata-name+dob,,
-222,Bremer Bremer,1997-03-18,DEF,Juventus FC,8,Brazil,Brazil,Itapitanga,-14.42278,-39.565,Brazil,Brazil,,Q38693097,high,wikipedia-squad,,
+222,Bremer,1997-03-18,DEF,Juventus FC,8,Brazil,Brazil,Itapitanga,-14.42278,-39.565,Brazil,Brazil,,Q38693097,high,wikipedia-squad,,
 223,PEREIRALeonardo Leo,1996-01-31,DEF,CR Flamengo,4,Brazil,Brazil,Curitiba,-25.42972,-49.27194,Brazil,,Brazil (U-17); Brazil (U-20),Q18199184,high,wikipedia-squad,,
-224,Douglas Douglas Santos,1994-03-22,DEF,FC Zenit St. Petersburg,8,Brazil,Brazil,João Pessoa,-7.12,-34.88,Brazil; Russia,Brazil,Brazil (U-20); Brazil (U-23),Q10268484,high,wikidata-name+dob,,
+224,Douglas Santos,1994-03-22,DEF,FC Zenit St. Petersburg,8,Brazil,Brazil,João Pessoa,-7.12,-34.88,Brazil; Russia,Brazil,Brazil (U-20); Brazil (U-23),Q10268484,high,wikidata-name+dob,,
 225,Henrique Fabinho,1993-10-23,MID,Al Ittihad,34,Brazil,Brazil,Campinas,-22.90091,-47.05729,Brazil,Brazil,Brazil (U-20); Brazil (U-23),Q641425,high,wikipedia-squad,,
-226,Danilo Danilo Santos,2001-04-29,MID,Botafogo,5,Brazil,Brazil,Salvador,-12.98306,-38.49278,Brazil,,,Q99557093,high,wikipedia-squad,,
+226,Danilo Santos,2001-04-29,MID,Botafogo,5,Brazil,Brazil,Salvador,-12.98306,-38.49278,Brazil,,,Q99557093,high,wikipedia-squad,,
 227,Felipe Endrick,2006-07-21,FWD,Olympique Lyonnais,17,Brazil,Brazil,Taguatinga,-15.83333,-48.05639,Brazil,Brazil,Brazil (U-17); Brazil (U-23),Q110644260,high,wikidata-name+dob,,
-228,Lucas Lucas Paqueta,1997-08-27,MID,CR Flamengo,64,Brazil,Brazil,Rio de Janeiro,-22.91111,-43.20556,Brazil,Brazil,,Q30089624,high,wikidata-name+dob,,
+228,Lucas Paqueta,1997-08-27,MID,CR Flamengo,64,Brazil,Brazil,Rio de Janeiro,-22.91111,-43.20556,Brazil,Brazil,,Q30089624,high,wikidata-name+dob,,
 229,Henrique André Luiz,2001-01-02,FWD,FC Zenit St. Petersburg,16,Brazil,Brazil,Petrópolis,-22.505,-43.17889,Brazil,Brazil,Brazil (U-20),Q101764291,high,wikidata-name+dob,,
 230,MARTINELLIGabriel Gabriel,2001-06-18,FWD,Arsenal FC,23,Brazil,Brazil,Guarulhos,-23.46667,-46.53333,Brazil,Brazil,Brazil (U-23),Q61460651,high,wikipedia-squad,,
-231,Ederson Ederson,1993-08-17,GK,Fenerbahçe SK,32,Brazil,Brazil,Osasco,-23.5325,-46.79167,Brazil; Portugal,Brazil,Brazil (U-20),Q17074511,high,web-verified,NO,"Corrected birthplace from Brasília fallback to Osasco, Brazil."
+231,Ederson,1993-08-17,GK,Fenerbahçe SK,32,Brazil,Brazil,Osasco,-23.5325,-46.79167,Brazil; Portugal,Brazil,Brazil (U-20),Q17074511,high,web-verified,NO,"Corrected birthplace from Brasília fallback to Osasco, Brazil."
 232,IBANEZRoger Roger,1998-11-23,DEF,Al Ahli FC,8,Brazil,Brazil,Canela,-29.36583,-50.81583,Brazil,,,Q55363875,high,wikipedia-squad,,
 233,Thiago Igor Thiago,2001-06-26,FWD,Brentford FC,5,Brazil,Brazil,Gama,-16.01944,-48.06694,Brazil,Brazil,,Q83639138,high,wikidata-name+dob,,
 234,Vitor Rayan,2006-08-03,FWD,AFC Bournemouth,2,Brazil,Brazil,Rio de Janeiro,-22.91111,-43.20556,Brazil,,,Q115937989,high,wikidata-name+dob,,
@@ -269,7 +269,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 268,Martin Yves Roberns Didier Experience,1999-03-09,DEF,AS Nancy,22,Haiti,France,Châteaubriant,47.7207,-1.3763,France; Haiti,Haiti,,Q107426681,high,web-verified,NO,"Corrected: Martin Expérience, born Châteaubriant, France; senior Haiti. Prior row used Tomás Rodríguez/Panama birthplace data."
 269,Duckens Nazon,1994-04-07,FWD,Esteghlal Tehran FC,83,Haiti,France,Châtenay-Malabry,48.76528,2.27806,Haiti; France,Haiti,,Q16916422,high,wikidata-name+dob,,born abroad
 270,Jean Ricner Bellegarde,1998-06-27,MID,Wolverhampton Wanderers FC,11,Haiti,France,Colombes,48.92361,2.25222,France; Haiti,,,Q26251607,high,wikidata-name+dob,,born abroad
-271,Don Deedson Deedson,2001-02-11,FWD,FC Dallas,33,Haiti,Haiti,Tabarre,18.58333,-72.26667,Haiti,,,Q72697581,high,wikidata-name+dob,,
+271,Don Deedson,2001-02-11,FWD,FC Dallas,33,Haiti,Haiti,Tabarre,18.58333,-72.26667,Haiti,,,Q72697581,high,wikidata-name+dob,,
 272,Alexandre Jr Pierre,2001-02-25,GK,FC Sochaux-Montbéliard,17,Haiti,France,Aubervilliers,48.91111,2.3825,France; Haiti,,,Q112623666,high,wikidata-name+dob,,born abroad
 273,Markhus Lacroix,1993-10-14,DEF,Colorado Springs Switchbacks FC,16,Haiti,USA,New Egypt,40.0651,-74.527,USA; Haiti,,,Q21621771,high,wikidata-name+dob,,born abroad
 274,Garven-Michee Metusala,1999-12-31,DEF,Colorado Springs Switchbacks FC,15,Haiti,Canada,Terrebonne,45.7,-73.63333,Haiti; Canada,,,Q107370468,high,wikipedia-squad,,born abroad
@@ -301,7 +301,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 300,Ross Cameron Stewart,1996-07-11,FWD,Southampton FC,3,Scotland,United Kingdom,Irvine,55.61667,-4.66667,Scotland,Scotland,,Q47126518,high,web-verified,NO,"Corrected: Ross Stewart, born Irvine, Scotland; senior Scotland. Prior row used Philipp Lienhart/Austria data."
 301,John Francis Souttar,1996-09-25,DEF,Rangers FC,24,Scotland,United Kingdom,Aberdeen,57.15,-2.1,Scotland,,Scotland (U-17); Scotland (U-19); Scotland (U-21),Q3238952,high,wikidata-name+dob,,
 302,Dominic John Hyam,1995-12-20,DEF,Wrexham AFC,4,Scotland,United Kingdom,Leuchars,56.3814,-2.8835,Scotland,Scotland,Scotland (U-19); Scotland (U-21),Q23007824,high,wikidata-name+dob,,
-303,Ben Gannon Gannon-Doak,2005-11-11,FWD,AFC Bournemouth,15,Scotland,United Kingdom,Dalry,55.711,-4.723,Scotland,Scotland,Scotland (U-16); Scotland (U-17); Scotland (U-21),Q110739094,high,wikidata-name+dob,,
+303,Ben Gannon-Doak,2005-11-11,FWD,AFC Bournemouth,15,Scotland,United Kingdom,Dalry,55.711,-4.723,Scotland,Scotland,Scotland (U-16); Scotland (U-17); Scotland (U-21),Q110739094,high,wikidata-name+dob,,
 304,George David Eric Hirst,1999-02-15,FWD,Ipswich Town FC,10,Scotland,United Kingdom,Sheffield,53.38083,-1.47028,England; Scotland,Scotland,England (U-17); England (U-18); England (U-19); England (U-20),Q27914873,high,wikidata-name+dob,,
 305,Lewis Ferguson,1999-08-24,MID,Bologna FC,25,Scotland,United Kingdom,Hamilton,55.777,-4.039,Scotland,,Scotland (U-21),Q47467341,high,wikidata-name+dob,,
 306,Lawrence Shankland,1995-08-10,FWD,Heart Of Midlothian FC,21,Scotland,United Kingdom,Glasgow,55.86111,-4.25,Scotland,,Scotland (U-21),Q18331623,high,wikidata-name+dob,,
@@ -347,7 +347,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 346,Diego Alexander Gomez,2003-03-27,MID,Brighton & Hove Albion FC,25,Paraguay,Paraguay,San Juan Bautista,-26.63333,-57.16667,Paraguay,Paraguay,Paraguay (U-20),Q115978703,high,wikidata-name+dob,,
 347,Arnaldo Antonio Sanabria,1996-03-04,FWD,US Cremonese,49,Paraguay,Paraguay,San Lorenzo,-25.34306,-57.50944,Paraguay,Paraguay,Paraguay (U-17); Paraguay (U-20),Q10856523,high,wikidata-name+dob,,
 348,Miguel Angel Almiron,1994-02-10,MID,Atlanta United FC,77,Paraguay,Paraguay,Asunción,-25.28,-57.63444,Paraguay,Paraguay,Paraguay (U-17); Peru (U-20),Q16145667,high,wikidata-name+dob,,
-349,Mauricio Mauricio,2001-06-22,MID,SE Palmeiras,4,Paraguay,Brazil,São Paulo,-23.55039,-46.63395,Brazil; Paraguay,,,Q65718498,high,wikipedia-squad,,born abroad
+349,Mauricio,2001-06-22,MID,SE Palmeiras,4,Paraguay,Brazil,São Paulo,-23.55039,-46.63395,Brazil; Paraguay,,,Q65718498,high,wikipedia-squad,,born abroad
 350,Orlando Daniel Gill,2000-06-11,GK,CA San Lorenzo,7,Paraguay,Paraguay,San Lorenzo,-25.34306,-57.50944,Paraguay,,,Q60842077,high,wikidata-name+dob,,
 351,Jose Maria Canale,1996-07-20,DEF,CA Lanús,2,Paraguay,Paraguay,Villa monica alritmo,-25.38333,-57.33333,Paraguay,,,Q50105161,high,wikidata-name+dob,,
 352,Adrián Andrés Cubas,1996-05-22,MID,Vancouver Whitecaps FC,34,Paraguay,Argentina,Aristóbulo del Valle,-27.0952,-54.897,Argentina; Paraguay,Paraguay,Argentina (U-20),Q16298600,medium,web-verified,NO,"DOB corrected to 1996-05-22 (was 1996-05-11). Born Aristóbulo del Valle, Argentina; senior Paraguay, youth Argentina U-20."
@@ -427,7 +427,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 426,Jamal Musiala,2003-02-26,MID,FC Bayern München,43,Germany,Germany,Stuttgart,48.7775,9.18,Germany; England,Germany,England (U-15); England (U-16); England (U-17); England (U-21); Germany (U-16),Q96072055,high,wikidata-name+dob,,
 427,Nick Woltemade,2002-02-14,FWD,Newcastle United FC,11,Germany,Germany,Bremen,53.07583,8.80722,Germany,Germany,Germany (U-17); Germany (U-20); Germany (U-21),Q84158344,high,wikidata-name+dob,,
 428,Oliver Baumann,1990-06-02,GK,TSG Hoffenheim,13,Germany,Germany,Breisach,48.02889,7.58,Germany,,Germany (U-18); Germany (U-19); Germany (U-20); Germany (U-21),Q129116,high,wikidata-name+dob,,
-429,Pascal Alexander GROß GROß Gross,1991-06-15,MID,Brighton & Hove Albion FC,18,Germany,Germany,Mannheim,49.48778,8.46611,Germany,Germany,Germany (U-18); Germany (U-19); Germany (U-20),Q509489,high,wikidata-name+dob,,
+429,Pascal Alexander GROß Gross,1991-06-15,MID,Brighton & Hove Albion FC,18,Germany,Germany,Mannheim,49.48778,8.46611,Germany,Germany,Germany (U-18); Germany (U-19); Germany (U-20),Q509489,high,wikidata-name+dob,,
 430,Maximilian Beier,2002-10-17,FWD,Borussia Dortmund,9,Germany,Germany,Brandenburg an der Havel,52.41414,12.55408,Germany,Germany,,Q80314837,high,wikidata-name+dob,,
 431,Nico Cédric Schlotterbeck,1999-12-01,DEF,Borussia Dortmund,28,Germany,Germany,Waiblingen,48.83028,9.31694,Germany,Germany,Germany (U-18); Germany (U-19); Germany (U-20); Germany (U-21),Q62015814,high,wikidata-name+dob,,
 432,Angelo Nicolas Stiller,2001-04-04,MID,VfB Stuttgart,8,Germany,Germany,Munich,48.1375,11.575,Germany,Germany,Germany (U-21),Q68676722,high,wikidata-name+dob,,
@@ -649,7 +649,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 648,Amadou Ba Onana,2001-08-16,MID,Aston Villa FC,30,Belgium,Senegal,Dakar,14.67256,-17.432,Belgium,Belgium,Belgium (U-17); Belgium (U-18); Belgium (U-19); Belgium (U-21),Q99328435,high,wikidata-name+dob,,born abroad
 649,Nathan Ngoy,2003-06-10,DEF,Lille OSC,5,Belgium,Belgium,Brussels,50.8503,4.3517,Belgium,,,Q107094087,high,wikidata-name+dob,,
 650,Matias Fernandez-Pardo,2005-02-03,FWD,Lille OSC,3,Belgium,Belgium,Brussels,50.84667,4.35167,Belgium; Spain,,,Q117041294,high,wikidata-name+dob,,
-651,Elsayed Mohamed Mohamed Elshenawy,1988-12-18,GK,Al Ahly FC,77,Egypt,Egypt,Kafr el-Sheikh,31.1,30.95,Egypt,Egypt,,Q17151209,high,wikipedia-squad,,
+651,Elsayed Mohamed Elshenawy,1988-12-18,GK,Al Ahly FC,77,Egypt,Egypt,Kafr el-Sheikh,31.1,30.95,Egypt,Egypt,,Q17151209,high,wikipedia-squad,,
 652,Yasser Ibrahim Ahmed,1993-02-10,DEF,Al Ahly FC,25,Egypt,Egypt,Mansoura,31.0364,31.3807,Egypt,Egypt,,Q17386078,low,web-verified,NO,"Re-identified as Yasser Ibrahim (Al Ahly CB, Egypt); DOB 1993-02-10 was correct. Born Mansoura; QID Q17386078; ~25 caps. Prior QID/birthplace were a wrong Qatari match."
 653,Hany Gamal Mohamed Hany,1996-02-02,DEF,Al Ahly FC,44,Egypt,Egypt,Cairo,30.04444,31.23583,Egypt,Egypt,Egypt (U-20),Q18705249,high,web-verified,NO,Confirmed Mohamed Hany (sheet name scrambled); DOB 1996-02-02 & Cairo birthplace verified; senior Egypt. Note: caps look high (sheet 44 vs ~19 on Wikipedia).
 654,Abdelmegeed Abdelsalam Hossam Abdelmaguid,2001-04-30,DEF,Zamalek SC,13,Egypt,Egypt,Cairo,30.0444,31.2357,Egypt,,,Q98937753,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
@@ -745,7 +745,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 744,Rodrigo Rodri,1996-06-22,MID,Manchester City FC,63,Spain,Spain,Madrid,40.41831,-3.70275,Spain,Spain,Spain (U-19); Spain (U-21); Spain (U-23),Q20994118,high,web-verified,NO,"Matched to Rodri / Rodrigo Hernández Cascante (Man City, Spain; QID Q20994118; 2024 Ballon d'Or). Born Madrid; DOB confirmed."
 745,Nicholas Williams,2002-07-12,FWD,Athletic Club,31,Spain,Spain,Pamplona,42.81667,-1.65,Spain; Ghana,Spain,Spain (U-18); Spain (U-21),Q104414736,high,wikipedia-squad,,
 746,Martin Zubimendi,1999-02-02,MID,Arsenal FC,26,Spain,Spain,San Sebastián,43.32,-1.98,Spain,Spain,Spain (U-17); Spain (U-19); Spain (U-21); Spain (U-23),Q63384759,high,wikidata-name+dob,,
-747,Lamine Yamal Yamal,2007-07-13,FWD,FC Barcelona,26,Spain,Spain,Esplugues de Llobregat,41.37667,2.08583,Spain; Equatorial Guinea,Spain,Spain (U-15); Spain (U-16); Spain (U-17); Spain (U-19),Q113704154,high,wikidata-name+dob,,
+747,Lamine Yamal,2007-07-13,FWD,FC Barcelona,26,Spain,Spain,Esplugues de Llobregat,41.37667,2.08583,Spain; Equatorial Guinea,Spain,Spain (U-15); Spain (U-16); Spain (U-17); Spain (U-19),Q113704154,high,wikidata-name+dob,,
 748,Pedro Pedri,2002-11-25,MID,FC Barcelona,42,Spain,Spain,Tegueste,28.52326,-16.34076,Spain,Spain,Spain (U-17); Spain (U-18); Spain (U-19); Spain (U-21); Spain (U-23),Q66606355,high,wikipedia-squad,,
 749,Mikel Oyarzabal,1997-04-21,FWD,Real Sociedad,54,Spain,Spain,Eibar,43.18428,-2.47327,Spain,Spain,Spain (U-18); Spain (U-19); Spain (U-21); Spain (U-23),Q21195147,high,wikidata-name+dob,,
 750,Pau Cubarsi,2007-01-22,DEF,FC Barcelona,13,Spain,Spain,Estanyol,41.94114,2.74058,Spain,Spain,Spain (U-15); Spain (U-16); Spain (U-17),Q118473161,high,wikidata-name+dob,,
@@ -766,12 +766,12 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 765,RODRIGUESGarry Garry,1990-11-27,MID,Apollon Limassol,61,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Cabo Verde; Netherlands,Cabo Verde,,Q4621784,high,wikipedia-squad,,born abroad
 766,Salomão Marcio,1997-02-23,GK,PFC Montana,11,Cabo Verde,Cabo Verde,Praia,14.91772,-23.50916,Cabo Verde,,,Q55433904,high,wikidata-name+dob,,
 767,CABRALSidny Sidny Lopes,2002-09-18,DEF,SL Benfica,12,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Cabo Verde,,,Q124382289,high,wikidata-name+dob,,born abroad
-768,Deroy Deroy Duarte,1999-07-04,MID,PFC Ludogorets Razgrad,34,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Netherlands; Cabo Verde,,,Q39082970,high,wikidata-name+dob,,born abroad
+768,Deroy Duarte,1999-07-04,MID,PFC Ludogorets Razgrad,34,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Netherlands; Cabo Verde,,,Q39082970,high,wikidata-name+dob,,born abroad
 769,Michael Laros Duarte,1997-02-28,MID,Puskás Akadémia FC,21,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Netherlands; Cabo Verde,,Netherlands (U-17); Netherlands (U-19),Q20676495,high,wikidata-name+dob,,born abroad
 770,SEMEDOJair Yannick,1995-12-29,MID,SC Farense,11,Cabo Verde,Cabo Verde,Praia,14.91772,-23.50916,Cabo Verde,,,Q130465245,high,wikipedia-squad,,
 771,Johnson Willy,1994-04-27,MID,AC Omonia,39,Cabo Verde,France,Montfermeil,48.89833,2.56472,France; Cabo Verde,,,Q44821118,high,wikidata-name+dob,,born abroad
 772,Emanuel Telmo,2001-06-21,MID,Vitória SC,17,Cabo Verde,Portugal,Lisbon,38.70804,-9.13902,Portugal; Cabo Verde,,,Q97580948,high,wikidata-name+dob,,born abroad
-773,Dailon Dailon Livramento,2001-05-04,FWD,Casa Pia AC,23,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Netherlands; Cabo Verde,,,Q110943455,high,wikidata-name+dob,,born abroad
+773,Dailon Livramento,2001-05-04,FWD,Casa Pia AC,23,Cabo Verde,Netherlands,Rotterdam,51.92,4.48,Netherlands; Cabo Verde,,,Q110943455,high,wikidata-name+dob,,born abroad
 774,Isaac Ryan,1990-01-08,FWD,I ğ dır FK,99,Cabo Verde,Cabo Verde,Mindelo,16.89135,-24.98798,France; Cabo Verde,Cabo Verde,,Q1392925,high,wikidata-name+dob,,
 775,Miguel Nuno Da Costa,1991-02-10,MID,Başakşehir FK,10,Cabo Verde,Cabo Verde,Praia,14.91772,-23.50916,Cabo Verde,,,Q23007684,high,wikipedia-squad,,
 776,MOREIRASteven Steven,1994-08-13,DEF,Columbus Crew,21,Cabo Verde,France,Noisy-le-Grand,48.84389,2.55806,Cabo Verde; France,,France (U-16); France (U-19); France (U-20); France (U-21),Q14371131,high,wikipedia-squad,,born abroad
@@ -885,15 +885,15 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 884,Pape Alassane Gueye,1999-01-24,MID,Villarreal CF,43,Senegal,France,Montreuil,48.86028,2.44306,Senegal; France,,,Q45935395,high,wikidata-name+dob,,born abroad
 885,Talib Raheem Fahad Talib,1994-10-21,GK,Al Talaba SC,21,Iraq,Iraq,Baghdad,33.31528,44.36611,Iraq,,Iraq (U-23),Q16555086,high,wikidata-name+dob,,
 886,Ghareeb Solaka Rebin Sulaka,1992-04-12,DEF,Port FC,56,Iraq,Iraq,Ankawa,36.22917,43.99361,Sweden; Iraq,Iraq,,Q18246217,high,wikidata-name+dob,,
-887,Haydar Hussein Hussein,2002-03-01,DEF,Pogoń Szczecin,28,Iraq,Sweden,Malmö,55.60587,13.00073,Iraq; Sweden,Iraq,Sweden (U-17); Sweden (U-19); Sweden (U-21),Q85767808,high,web-verified,NO,"Matched to Hussein Ali (Pogoń Szczecin, Iraq; QID Q85767808; sheet name garbled). Born Malmö, Sweden; switched Sweden youth to Iraq seniors (2023). DOB confirmed."
-888,Tahseen Abd Zaid Zaid,2001-01-29,DEF,Pakhtakor Tashkent FK,29,Iraq,Iraq,Najaf,32.02895,44.33962,Iraq,Iraq,Iraq (U-23),Q114355105,high,wikidata-name+dob,,
+887,Haydar Hussein,2002-03-01,DEF,Pogoń Szczecin,28,Iraq,Sweden,Malmö,55.60587,13.00073,Iraq; Sweden,Iraq,Sweden (U-17); Sweden (U-19); Sweden (U-21),Q85767808,high,web-verified,NO,"Matched to Hussein Ali (Pogoń Szczecin, Iraq; QID Q85767808; sheet name garbled). Born Malmö, Sweden; switched Sweden youth to Iraq seniors (2023). DOB confirmed."
+888,Tahseen Abd Zaid,2001-01-29,DEF,Pakhtakor Tashkent FK,29,Iraq,Iraq,Najaf,32.02895,44.33962,Iraq,Iraq,Iraq (U-23),Q114355105,high,wikidata-name+dob,,
 889,Hashim Rahman Akam Hashim,1998-08-16,DEF,Al Zawra'a SC,15,Iraq,Iraq,Erbil,36.19111,44.00944,Iraq,Iraq,,Q124350127,high,wikidata-name+dob,,
 890,Younus Hashim Munaf Younus,1996-11-16,DEF,Al Shorta SC,34,Iraq,Iraq,Tikrit,34.61581,43.67861,Iraq,Iraq,,Q110111698,high,web-verified,NO,"Matched to Manaf Younis / Al-Tekreeti (Al-Shorta, Iraq; QID Q110111698; sheet name reordered). Born Tikrit; DOB confirmed."
 891,Wali Faeq Youssef Amyn,2003-08-21,MID,AEK Larnaca FC,27,Iraq,Germany,Essen,51.45083,7.01306,Germany; Iraq,,,Q106372614,high,wikidata-name+dob,,born abroad
 892,Bayesh Kamil Ibrahim Bayesh,2000-05-01,MID,Al Dhafra SCC,77,Iraq,Iraq,Baghdad,33.3152,44.3661,Iraq,,,Q45936149,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 893,Ibrahim Karim Ali Alhamadi,2002-03-01,FWD,Luton Town FC,21,Iraq,Iraq,Amarah,31.83561,47.14483,Iraq,Iraq,Iraq (U-23),Q80661874,high,web-verified,NO,"Matched to Ali Al-Hamadi (on loan at Luton, Iraq; QID Q80661874). Born Maysan governorate (coords = capital Amarah). DOB confirmed; caps ~17 (sheet 21)."
 894,Ali Kadhim Mohanad Ali,2000-06-20,FWD,Dibba FC,73,Iraq,Iraq,Baghdad,33.31528,44.36611,Iraq,,,Q45935415,high,wikidata-name+dob,,
-895,Ihab Ahmed Ahmed,2003-07-12,FWD,Nashville SC,4,Iraq,Sweden,Motala,58.53706,15.03649,Sweden; Iraq,Iraq,Sweden (U-17); Sweden (U-18); Sweden (U-19); Sweden (U-21),Q106907687,high,web-verified,NO,"Ahmed Qasem confirmed (Nashville SC, Iraq; sheet name reordered). Born Motala, Sweden (was generic). Senior Iraq (switch approved May 2026); youth Sweden U-17..U-21."
+895,Ihab Ahmed,2003-07-12,FWD,Nashville SC,4,Iraq,Sweden,Motala,58.53706,15.03649,Sweden; Iraq,Iraq,Sweden (U-17); Sweden (U-18); Sweden (U-19); Sweden (U-21),Q106907687,high,web-verified,NO,"Ahmed Qasem confirmed (Nashville SC, Iraq; sheet name reordered). Born Motala, Sweden (was generic). Senior Iraq (switch approved May 2026); youth Sweden U-17..U-21."
 896,Hasan Hachim Jalal Hassan,1991-05-18,GK,Al Zawra'a SC,105,Iraq,Iraq,Al Diwaniyah,31.98917,44.92472,Iraq; Al-Qādisiyyah Governorate,Iraq,Iraq (U-23),Q10526042,high,wikidata-name+dob,,
 897,Yousif Hashim Ali Yousif,1996-01-19,FWD,Al Talaba SC,7,Iraq,Iraq,Baghdad,33.3152,44.3661,Iraq,,,Q96654340,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 898,Aamar Iqbal Zidane,2003-04-27,MID,FC Utrecht,26,Iraq,United Kingdom,Manchester,53.46667,-2.23333,England; Iraq,,,Q107882685,high,wikipedia-squad,,born abroad
@@ -919,12 +919,12 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 918,Sander Gard Bolin Berge,1998-02-14,MID,Fulham FC,67,Norway,Norway,Bærum Municipality,59.8904,10.526,Norway,Norway,Norway (U-21),Q20675980,high,wikidata-name+dob,,
 919,Erling Braut Haaland,2000-07-21,FWD,Manchester City FC,51,Norway,United Kingdom,Leeds,53.7975,-1.54361,England; Norway,Norway,Norway (U-20); Norway (U-21),Q28967995,high,wikidata-name+dob,,born abroad
 920,Martín Odegaard,1998-12-17,MID,Arsenal FC,69,Norway,Norway,Drammen,59.74536,10.20597,Norway,Norway,Norway (U-15); Norway (U-16); Norway (U-17); Norway (U-21),Q16902219,high,wikidata-name+dob,,
-921,Jørgen Strand Strand Larsen,2000-02-06,FWD,Crystal Palace FC,28,Norway,Norway,Halden,59.12639,11.48278,Norway,Norway,,Q28933132,high,wikidata-name+dob,,
+921,Jørgen Strand Larsen,2000-02-06,FWD,Crystal Palace FC,28,Norway,Norway,Halden,59.12639,11.48278,Norway,Norway,,Q28933132,high,wikidata-name+dob,,
 922,Sander Tangvik,2002-11-29,GK,Hamburger SV,0,Norway,Norway,Trondheim,63.44,10.4,Norway,,Norway (U-16); Norway (U-17); Norway (U-18); Norway (U-20); Norway (U-21),Q105754161,high,wikidata-name+dob,,
 923,Egil Selvik,1997-07-30,GK,Watford FC,7,Norway,Norway,Sandnes Municipality,58.845,5.82944,Norway,,,Q62617279,high,wikidata-name+dob,,
 924,Fredrik Aursnes,1995-12-10,MID,SL Benfica,23,Norway,Norway,Hareid,62.36417,6.00139,Norway,,Norway (U-18); Norway (U-21),Q20090180,high,wikidata-name+dob,,
 925,Fredrik André Bjorkan,1998-08-21,DEF,FK Bodø/Glimt,21,Norway,Norway,Bodø Municipality,67.28306,14.38306,Norway,,,Q24007315,high,wikidata-name+dob,,
-926,Marcus Holmgren Holmgren Pedersen,2000-07-16,DEF,Torino FC,32,Norway,Norway,Hammerfest,70.66336,23.68209,Norway,,,Q59268631,high,wikidata-name+dob,,
+926,Marcus Holmgren Pedersen,2000-07-16,DEF,Torino FC,32,Norway,Norway,Hammerfest,70.66336,23.68209,Norway,,,Q59268631,high,wikidata-name+dob,,
 927,Torbjørn Lysaker Heggem,1999-01-12,DEF,Bologna FC,16,Norway,Norway,Trondheim,63.44,10.4,Norway,,,Q63968167,high,wikidata-name+dob,,
 928,Kristian Thorstvedt,1999-03-13,MID,US Sassuolo,38,Norway,Norway,Stavanger,58.97,5.73139,Norway,,,Q61721648,high,wikidata-name+dob,,
 929,Thelonious Gerard Aasgaard,2002-05-02,MID,Rangers FC,8,Norway,United Kingdom,Liverpool,53.40722,-2.99167,England; Norway,,,Q100711783,high,wikidata-name+dob,,born abroad
@@ -1021,42 +1021,42 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 1020,Rasem Adel Amer Jamous,2002-07-03,MID,Al Zawra'a SC,19,Jordan,Jordan,Amman,31.9454,35.9284,Jordan,,,Q130495887,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 1021,Faisal Yousef Mohammad,1997-12-30,FWD,Raja Casablanca,40,Jordan,Jordan,Ar Ramtha,32.55917,36.00694,Jordan,Jordan,Jordan (U-20),Q83787036,high,wikidata-name+dob,,
 1022,Mahmoud Ali Noor Alrawabdeh,1997-02-24,MID,Selangor FC,69,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,,Q106173174,high,wikipedia-squad,,
-1023,Iyad Ali Ali Olwan,2000-03-26,FWD,Al Sailiya SC,67,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,Jordan (U-23),Q107130635,high,wikidata-name+dob,,
-1024,Mohammad Mousa Mousa Altamari,1997-06-10,FWD,Stade Rennais FC,93,Jordan,Jordan,Amman,31.95,35.93333,France,Jordan,Jordan (U-23),Q27909473,high,wikipedia-squad,,
+1023,Iyad Ali Olwan,2000-03-26,FWD,Al Sailiya SC,67,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,Jordan (U-23),Q107130635,high,wikidata-name+dob,,
+1024,Mohammad Mousa Altamari,1997-06-10,FWD,Stade Rennais FC,93,Jordan,Jordan,Amman,31.95,35.93333,France,Jordan,Jordan (U-23),Q27909473,high,wikipedia-squad,,
 1025,Burhan Shehadeh Odeh Fakhoury,2005-11-22,FWD,Pyramids FC,11,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,,Q130508829,high,web-verified,NO,"Corrected: Odeh Al-Fakhouri, born Amman, Jordan; senior Jordan. Prior row reused Gessime Yassine/France-Morocco data."
 1026,Zaid Khaleel Nour Baniateyah,1993-01-25,GK,Al Faisaly SC,5,Jordan,Jordan,Amman,31.95,35.93333,Jordan,,,Q33541239,high,wikipedia-squad,,
 1027,Nayef Ahmad Mahmoud Almardi,1993-10-06,FWD,Al Hussein SC,88,Jordan,Jordan,Aqaba,29.53222,35.00611,Jordan,Jordan,Jordan (U-23),Q21621941,high,wikipedia-squad,,
 1028,Ayed Fadel Rajaei Ayed,1993-07-25,MID,Al Hussein SC,73,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,Jordan (U-20); Jordan (U-23),Q15983763,high,wikidata-name+dob,,
 1029,Mohammad Sami Ibrahim,2000-04-27,MID,Al Karma SC,57,Jordan,Jordan,Zarqa,32.08333,36.1,Jordan,Jordan,,Q106173160,high,wikidata-name+dob,,
 1030,Majed Jamil Mohammad Abualnadi,2001-02-08,DEF,Selangor FC,19,Jordan,USA,Overland Park,38.94007,-94.6807,USA; Jordan; Palestine,,,Q62364798,high,wikidata-name+dob,,born abroad
-1031,Amer Saleem Saleem,1992-01-17,DEF,Al Hussein SC,13,Jordan,Jordan,Amman,31.95,35.93333,Jordan,,,Q33124960,high,wikidata-name+dob,,
-1032,Ahmed Mohammad Mohammad,2005-07-13,DEF,Al Hussein SC,0,Jordan,Jordan,Amman,31.9454,35.9284,Jordan,Jordan,Jordan (U-20); Jordan (U-23),Q135287344,low,web-verified,fallback,"Position corrected to DEF (left-back); Mohammad Taha / Abu Ghoush, Al-Hussein, Jordan. QID Q135287344. Birth city not found in sources. fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified."
+1031,Amer Saleem,1992-01-17,DEF,Al Hussein SC,13,Jordan,Jordan,Amman,31.95,35.93333,Jordan,,,Q33124960,high,wikidata-name+dob,,
+1032,Ahmed Mohammad,2005-07-13,DEF,Al Hussein SC,0,Jordan,Jordan,Amman,31.9454,35.9284,Jordan,Jordan,Jordan (U-20); Jordan (U-23),Q135287344,low,web-verified,fallback,"Position corrected to DEF (left-back); Mohammad Taha / Abu Ghoush, Al-Hussein, Jordan. QID Q135287344. Birth city not found in sources. fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified."
 1033,Ahmad Salameh Saed,1997-02-01,DEF,Al Hussein SC,22,Jordan,Jordan,Irbid,32.5556,35.85,Jordan,Jordan,Jordan (U-23),Q130210573,medium,web-verified,NO,"Born Jordan; city Irbid is a low-medium estimate (Al-Rosan tribe + early clubs in Irbid). Al-Hussein; senior Jordan, youth U-23."
 1034,Mahmoud Saleh Mohannad Abutaha,2003-02-02,MID,Al-Quwa Al-Jawiya,31,Jordan,Jordan,Amman,31.95,35.93333,Jordan,Jordan,Jordan (U-20); Jordan (U-23),Q124397380,high,wikipedia-squad,,
 1035,Mahmoud Ahmed Nizar Alrashdan,1999-03-23,MID,Qatar SC,48,Jordan,Jordan,Irbid,32.55556,35.85,Jordan,Jordan,Jordan (U-23),Q124302622,high,wikipedia-squad,,
 1036,Ra'ed Mahmoud Abdallah Alfakhori,2000-01-22,GK,Al Wahdat SC,16,Jordan,Jordan,Russeifa,32.01778,36.04639,Jordan,,,Q60048828,high,wikipedia-squad,,
 1037,Manel Farhan Ehsan Haddad,1994-02-05,DEF,Al Hussein SC,91,Jordan,Jordan,Irbid,32.55556,35.85,Jordan,Jordan,Jordan (U-17); Jordan (U-20); Jordan (U-23),Q16236181,high,wikipedia-squad,,
-1038,Ahmad Ali Ali Azaizeh,2004-04-13,FWD,Al Shabab FC,5,Jordan,Germany,Berlin,52.52,13.405,Jordan,,,Q131822292,high,wikidata-name+dob,,born abroad
-1039,Ratib Mohammad Mohammad Aldaoud,1992-04-12,MID,Al Wahdat SC,14,Jordan,Jordan,Ar Ramtha,32.55917,36.00694,Jordan,Jordan,Jordan (U-17); Jordan (U-23),Q16234825,high,wikipedia-squad,,
+1038,Ahmad Ali Azaizeh,2004-04-13,FWD,Al Shabab FC,5,Jordan,Germany,Berlin,52.52,13.405,Jordan,,,Q131822292,high,wikidata-name+dob,,born abroad
+1039,Ratib Mohammad Aldaoud,1992-04-12,MID,Al Wahdat SC,14,Jordan,Jordan,Ar Ramtha,32.55917,36.00694,Jordan,Jordan,Jordan (U-17); Jordan (U-23),Q16234825,high,wikipedia-squad,,
 1040,Said Ghazi Anas Badawi,1997-09-13,DEF,Al Faisaly SC,1,Jordan,Jordan,Amman,31.95,35.93333,Jordan,,,Q135971385,high,wikidata-name+dob,,
-1041,Diogo Diogo Costa,1999-09-19,GK,FC Porto,44,Portugal,Switzerland,Rothrist,47.30278,7.88333,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q26255578,high,wikidata-name+dob,,born abroad
+1041,Diogo Costa,1999-09-19,GK,FC Porto,44,Portugal,Switzerland,Rothrist,47.30278,7.88333,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q26255578,high,wikidata-name+dob,,born abroad
 1042,SEMEDONélson Nelson,1993-11-16,DEF,Fenerbahçe SK,51,Portugal,Portugal,Lisbon,38.70804,-9.13902,Portugal,Portugal,,Q16235823,high,wikipedia-squad,,
 1043,Rúben Ruben Dias,1997-05-14,DEF,Manchester City FC,76,Portugal,Portugal,Amadora,38.75,-9.23333,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q21621168,high,wikidata-name+dob,,
 1044,Tomás Tomas Araujo,2002-05-16,DEF,SL Benfica,6,Portugal,Portugal,Vila Nova de Famalicão,41.41667,-8.51667,Portugal,,,Q99617294,high,wikidata-name+dob,,
-1045,Diogo Diogo Dalot,1999-03-18,DEF,Manchester United FC,35,Portugal,Portugal,Braga,41.53333,-8.41667,Portugal,,,Q26255506,high,wikidata-name+dob,,
+1045,Diogo Dalot,1999-03-18,DEF,Manchester United FC,35,Portugal,Portugal,Braga,41.53333,-8.41667,Portugal,,,Q26255506,high,wikidata-name+dob,,
 1046,Luiz Matheus,1998-08-27,MID,Manchester City FC,20,Portugal,Brazil,Rio de Janeiro,-22.91111,-43.20556,Brazil; Portugal,Portugal,,Q96211488,high,wikidata-name+dob,,born abroad
 1047,Ronaldo Cristiano Ronaldo,1985-02-05,FWD,Al Nassr FC,229,Portugal,Portugal,Funchal,32.65,-16.91667,Portugal,Portugal,Portugal (U-15); Portugal (U-17); Portugal (U-20); Portugal (U-21),Q11571,high,wikidata-name+dob,,
 1048,Miguel Bruno,1994-09-08,MID,Manchester United FC,90,Portugal,Portugal,Maia,41.23333,-8.61667,Portugal,Portugal,Portugal (U-19); Portugal (U-20); Portugal (U-21),Q4979316,high,wikidata-name+dob,,
 1049,RAMOSGonçalo Goncalo,2001-06-20,FWD,Paris Saint-Germain,26,Portugal,Portugal,Olhão,37.02778,-7.83889,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q60621615,high,wikipedia-squad,,
-1050,Bernardo Bernardo Silva,1994-08-10,MID,Manchester City FC,110,Portugal,Portugal,Lisbon,38.70804,-9.13902,Portugal,Portugal,Portugal (U-19); Portugal (U-21),Q15521306,high,wikidata-name+dob,,
+1050,Bernardo Silva,1994-08-10,MID,Manchester City FC,110,Portugal,Portugal,Lisbon,38.70804,-9.13902,Portugal,Portugal,Portugal (U-19); Portugal (U-21),Q15521306,high,wikidata-name+dob,,
 1051,João Joao Felix,1999-11-10,FWD,Al Nassr FC,54,Portugal,Portugal,Viseu,40.6575,-7.91389,Portugal,Portugal,Portugal (U-18); Portugal (U-19); Portugal (U-21),Q27049064,high,wikidata-name+dob,,
 1052,Pedro Jose Sa,1993-01-17,GK,Wolverhampton Wanderers FC,5,Portugal,Portugal,Braga,41.53333,-8.41667,Portugal,,Portugal (U-20); Portugal (U-21),Q6294052,high,wikidata-name+dob,,
-1053,Renato Renato Veiga,2003-07-29,DEF,Villarreal CF,14,Portugal,Portugal,Lisbon,38.70804,-9.13902,Portugal,,,Q116700351,high,wikidata-name+dob,,
+1053,Renato Veiga,2003-07-29,DEF,Villarreal CF,14,Portugal,Portugal,Lisbon,38.70804,-9.13902,Portugal,,,Q116700351,high,wikidata-name+dob,,
 1054,Gonçalo Goncalo Inacio,2001-08-25,DEF,Sporting CP,22,Portugal,Portugal,Almada,38.68028,-9.15833,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q99955331,high,wikidata-name+dob,,
 1055,Pedro Joao Neves,2004-09-27,MID,Paris Saint-Germain,23,Portugal,Portugal,Tavira,37.13085,-7.6506,Portugal,Portugal,Portugal (U-15); Portugal (U-19); Portugal (U-21),Q113551733,high,wikidata-name+dob,,
 1056,António Francisco Trincao,1999-12-29,FWD,Sporting CP,18,Portugal,Portugal,Viana do Castelo,41.7,-8.83333,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q24084271,high,wikidata-name+dob,,
 1057,Alexandre Rafael Leao,1999-06-10,FWD,AC Milan,45,Portugal,Portugal,Almada,38.68028,-9.15833,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q30055335,high,wikidata-name+dob,,
-1058,Pedro Pedro Neto,2000-03-09,FWD,Chelsea FC,26,Portugal,Portugal,Viana do Castelo,41.7,-8.83333,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q30036972,high,wikidata-name+dob,,
+1058,Pedro Neto,2000-03-09,FWD,Chelsea FC,26,Portugal,Portugal,Viana do Castelo,41.7,-8.83333,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q30036972,high,wikidata-name+dob,,
 1059,Manuel Goncalo,1996-11-29,FWD,Real Sociedad,35,Portugal,Portugal,Benavente,38.98333,-8.81667,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q16729477,high,wikidata-name+dob,,
 1060,Pedro Joao Cancelo,1994-05-27,DEF,FC Barcelona,69,Portugal,Portugal,Barreiro,38.66089,-9.07328,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-20); Portugal (U-21),Q6298063,high,wikidata-name+dob,,
 1061,Diogo Ruben,1997-03-13,MID,Al Hilal SC,67,Portugal,Portugal,Mozelos,40.99917,-8.55611,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-21),Q17486599,high,wikidata-name+dob,,
@@ -1064,9 +1064,9 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 1063,Vitor Vitinha,2000-02-13,MID,Paris Saint-Germain,39,Portugal,Portugal,Faro,37.01611,-7.935,Portugal,Portugal,Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-21),Q66818509,high,wikipedia-squad,,
 1064,Samuel Samu Costa,2000-11-27,DEF,RCD Mallorca,6,Portugal,Portugal,Aveiro,40.63889,-8.65528,Portugal,,,Q97441426,high,wikidata-name+dob,,
 1065,Alexandre Nuno,2002-06-19,DEF,Paris Saint-Germain,45,Portugal,Portugal,Sintra,38.79736,-9.39042,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-19); Portugal (U-21),Q96396963,high,wikidata-name+dob,,
-1066,Francisco Francisco Conceicao,2002-12-14,FWD,Juventus FC,18,Portugal,Portugal,Coimbra,40.21111,-8.42889,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-21),Q99617367,high,wikidata-name+dob,,
+1066,Francisco Conceicao,2002-12-14,FWD,Juventus FC,18,Portugal,Portugal,Coimbra,40.21111,-8.42889,Portugal,Portugal,Portugal (U-16); Portugal (U-17); Portugal (U-18); Portugal (U-21),Q99617367,high,wikidata-name+dob,,
 1067,Lionel Nzau Mpasi,1994-08-01,GK,Le Havre AC,29,Congo DR,France,Meaux,48.95944,2.88778,France; Congo DR,,,Q86041826,high,wikidata-name+dob,,born abroad
-1068,Wan Wan-Bissaka,1997-11-26,DEF,West Ham United FC,13,Congo DR,United Kingdom,Croydon,51.3727,-0.1099,England; Congo DR,,Congo DR (U-20); England (U-20); England (U-21),Q50137347,high,wikipedia-squad,,born abroad
+1068,Wan-Bissaka,1997-11-26,DEF,West Ham United FC,13,Congo DR,United Kingdom,Croydon,51.3727,-0.1099,England; Congo DR,,Congo DR (U-20); England (U-20); England (U-21),Q50137347,high,wikipedia-squad,,born abroad
 1069,Steve Nkanu Kapuadi,1998-04-30,DEF,Widzew Ł ód ź,4,Congo DR,France,Le Mans,48.00417,0.19694,France,,,Q85291597,high,wikidata-name+dob,,born abroad
 1070,Axel Tuanzebe,1997-11-14,DEF,Burnley FC,14,Congo DR,Congo DR,Bunia,1.56667,30.25,Congo DR; England,,England (U-21),Q27019988,high,wikidata-name+dob,,
 1071,Dylan Buduka Batubinsika,1996-02-15,DEF,AEL FC,15,Congo DR,France,Cergy-Pontoise,49.0361,2.06306,France; Congo DR,,,Q34360045,high,wikidata-name+dob,,born abroad
@@ -1079,7 +1079,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 1078,Joris Kayembe,1994-08-08,DEF,KRC Genk,27,Congo DR,Belgium,Brussels,50.84667,4.35167,Belgium; Congo DR,,Belgium (U-21),Q16979997,high,wikidata-name+dob,,born abroad
 1079,Meschack Lina Elia,1997-08-06,FWD,Alanyaspor,68,Congo DR,Congo DR,Kinshasa,-4.32194,15.31194,Congo DR,Congo DR,,Q22162731,high,wikidata-name+dob,,
 1080,Noah Junior Sadiki,2004-12-17,MID,Sunderland AFC,21,Congo DR,Belgium,Brussels-Capital Region,50.84667,4.3525,Congo DR,,,Q112112992,high,wikidata-name+dob,,born abroad
-1081,Tshibola Tshibola,1995-01-02,MID,Kilmarnock FC,17,Congo DR,United Kingdom,London Borough of Newham,51.51667,0.03333,England; Congo DR,Congo DR,England (U-18),Q18128872,high,wikipedia-squad,,born abroad
+1081,Tshibola,1995-01-02,MID,Kilmarnock FC,17,Congo DR,United Kingdom,London Borough of Newham,51.51667,0.03333,England; Congo DR,Congo DR,England (U-18),Q18128872,high,wikipedia-squad,,born abroad
 1082,Timothy Bruce Munzoko Fayulu,1999-07-24,GK,FC Noah,3,Congo DR,France,Geneva,46.2,6.15,Switzerland,,,Q65680079,high,wikidata-name+dob,,born abroad
 1083,Cedric Bakambu,1991-04-11,FWD,Real Betis,71,Congo DR,France,Vitry-sur-Seine,48.7875,2.39278,France; Congo DR,Congo DR,France (U-18); France (U-19); France (U-20),Q932982,high,wikidata-name+dob,,born abroad
 1084,Charles Monginda Pickel,1997-05-15,MID,RCD Espanyol,35,Congo DR,Switzerland,Solothurn,47.20806,7.5375,Switzerland,Congo DR,Switzerland (U-18); Switzerland (U-19); Switzerland (U-20),Q24256738,high,wikidata-name+dob,,born abroad
@@ -1089,7 +1089,7 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 1088,Mangulu Chancel Mbemba,1994-08-08,DEF,Lille OSC,110,Congo DR,Congo DR,Kisangani,0.51528,25.19111,Congo DR,Congo DR,,Q3196721,high,wikidata-name+dob,,
 1089,Simon Bokote Banza,1996-08-13,FWD,Al Jazira,16,Congo DR,France,Paris,48.8566,2.3522,Congo DR; France,,,Q23887828,high,wikidata-name+dob,,born abroad
 1090,Gédéon Tchingoma Kyatengwa Kalulu,1997-08-29,DEF,Aris Limassol FC,29,Congo DR,France,8th arrondissement of Lyon,45.73482,4.86814,France; Congo DR,,,Q66528692,high,wikidata-name+dob,,born abroad
-1091,Edo Kayembe Kayembe,1998-06-03,MID,Watford FC,43,Congo DR,Congo DR,Kananga,-5.89611,22.41667,Congo DR,Congo DR,Congo DR (U-23),Q46699047,high,web-verified,NO,"Edo Kayembe confirmed (Watford, DR Congo); born Kananga; DOB verified. Senior DR Congo (caps ~41 vs sheet 43); youth U-23."
+1091,Edo Kayembe,1998-06-03,MID,Watford FC,43,Congo DR,Congo DR,Kananga,-5.89611,22.41667,Congo DR,Congo DR,Congo DR (U-23),Q46699047,high,web-verified,NO,"Edo Kayembe confirmed (Watford, DR Congo); born Kananga; DOB verified. Senior DR Congo (caps ~41 vs sheet 43); youth U-23."
 1092,Arthur Fuka Masuaku,1993-11-07,DEF,RC Lens,45,Congo DR,France,Lille,50.63194,3.0575,Congo DR; France,Congo DR,France (U-18); France (U-19),Q16010783,high,wikidata-name+dob,,born abroad
 1093,Utkir Yusupov,1991-01-04,GK,PFC Navbahor Namangan,46,Uzbekistan,Kazakhstan,Sayram,42.30194,69.77028,Uzbekistan,,,Q60298555,high,wikidata-name+dob,,born abroad
 1094,Abdukodir Khusanov,2004-02-29,DEF,Manchester City FC,28,Uzbekistan,Uzbekistan,Tashkent,41.31111,69.27972,Uzbekistan,Uzbekistan,Uzbekistan (U-17); Uzbekistan (U-20); Uzbekistan (U-23),Q111479885,high,wikidata-name+dob,,
@@ -1200,25 +1200,25 @@ player_id,player_name,date_of_birth,position,club_team,caps,currently_playing_fo
 1199,Caleb Marfo Yirenkyi,2006-01-15,MID,FC Nordsjælland,12,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q130337999,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 1200,Jonas Adjei Adjetey,2003-12-13,DEF,VfL Wolfsburg,11,Ghana,Ghana,Accra,5.55602,-0.1969,,,,Q124045019,high,wikidata-name+dob,,citizenship missing on Wikidata
 1201,Thomas Teye Partey,1993-06-13,MID,Villarreal CF,59,Ghana,Ghana,Odumase Krobo,7.54561,-1.73781,Ghana,Ghana,,Q15963873,high,wikidata-name+dob,,
-1202,Abdul Mumin Mumin,1998-06-06,DEF,Rayo Vallecano,5,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q27064119,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
-1203,Abdul Fatawu Fatawu,2004-03-08,FWD,Leicester City FC,29,Ghana,Ghana,Tamale,9.4075,-0.85333,Ghana,Ghana,Ghana (U-17); Ghana (U-20); Ghana (U-23),Q105812639,high,wikidata-name+dob,,
+1202,Abdul Mumin,1998-06-06,DEF,Rayo Vallecano,5,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q27064119,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
+1203,Abdul Fatawu,2004-03-08,FWD,Leicester City FC,29,Ghana,Ghana,Tamale,9.4075,-0.85333,Ghana,Ghana,Ghana (U-17); Ghana (U-20); Ghana (U-23),Q105812639,high,wikidata-name+dob,,
 1204,Kwasi Sibo,1998-06-24,MID,Real Oviedo,9,Ghana,Ghana,Wa,10.0667,-2.5,Ghana,,,Q66370589,high,wikidata-name+dob,,
 1205,Jordan Pierre Ayew,1991-09-11,FWD,Leicester City FC,121,Ghana,France,Marseille,43.29667,5.37639,France; Ghana,Ghana,Ghana (U-20),Q367861,high,wikidata-name+dob,,born abroad
 1206,Brandon Michael Clarke Thomas-Asante,1998-12-29,FWD,Coventry City FC,9,Ghana,United Kingdom,Milton Keynes,52.03333,-0.76667,England; Ghana,,,Q26251815,high,wikidata-name+dob,,born abroad
 1207,Antoine Serlom Semenyo,2000-01-07,MID,Manchester City FC,35,Ghana,United Kingdom,London,51.50722,-0.1275,England; Ghana,Ghana,,Q52990659,high,wikidata-name+dob,,born abroad
 1208,Joseph Tetteh Anang,2000-06-08,GK,St Patrick's Athletic FC,1,Ghana,Ghana,Teshie,5.58333,-0.1,Ghana; England,,,Q107985032,high,wikidata-name+dob,,
-1209,Christopher Bonsu Bonsu Baah,2004-12-14,FWD,Al Qadsiah FC,9,Ghana,Ghana,Accra,5.55602,-0.1969,Ghana,,,Q117408985,high,wikidata-name+dob,,
+1209,Christopher Bonsu Baah,2004-12-14,FWD,Al Qadsiah FC,9,Ghana,Ghana,Accra,5.55602,-0.1969,Ghana,,,Q117408985,high,wikidata-name+dob,,
 1210,Gideon Mensah,1998-07-18,DEF,AJ Auxerre,41,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,Ghana,,Q25939340,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 1211,Elisha Owusu,1997-11-07,MID,AJ Auxerre,21,Ghana,France,Montreuil,48.86028,2.44306,Ghana; France,,,Q55934972,high,wikidata-name+dob,,born abroad
 1212,Benjamin Asare,1992-07-13,GK,Hearts Of Oak SC,14,Ghana,Ghana,Accra,5.55602,-0.1969,Ghana,Ghana,,Q106212969,medium,web-verified,NO,"Benjamin Asare confirmed (Hearts of Oak GK, Ghana); DOB verified. Born Accra (Korle Gonno) per Ghanaian bios - Wikipedia only 'Ghana', city medium confidence. Senior Ghana."
-1213,Abdul Rahman Rahman,1994-07-02,DEF,PAOK Saloniki,53,Ghana,Ghana,Tamale,9.4075,-0.85333,Ghana,Ghana,Ghana (U-20),Q317389,high,wikipedia-squad,,
+1213,Abdul Rahman,1994-07-02,DEF,PAOK Saloniki,53,Ghana,Ghana,Tamale,9.4075,-0.85333,Ghana,Ghana,Ghana (U-20),Q317389,high,wikipedia-squad,,
 1214,Jerome Opoku,1998-10-14,DEF,Başakşehir FK,12,Ghana,United Kingdom,Mitcham,51.4009,-0.1517,England; Ghana,,,Q67905022,high,wikidata-name+dob,,born abroad
 1215,Inaki Williams,1994-06-15,FWD,Athletic Club,26,Ghana,Spain,Bilbao,43.26306,-2.935,Spain; Ghana,Ghana; Spain,Spain (U-21),Q18608497,high,wikidata-name+dob,,born abroad; senior caps for multiple nations
 1216,Augustine Boakye,2000-11-03,MID,AS Saint-Etienne,0,Ghana,Ghana,Bompata,6.63333,-1.06667,Ghana,,,Q90307470,high,wikidata-name+dob,,
 1217,Kojo Peprah Oppong,2004-06-04,DEF,OGC Nice,4,Ghana,Ghana,Accra,5.55602,-0.1969,Ghana,,,Q117848823,high,wikidata-name+dob,,
 1218,Kamal Deen Sulemana,2002-02-15,FWD,Atalanta Bergamo,29,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q86269576,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 1219,Derrick Luckassen,1995-07-03,DEF,Pafos FC,1,Ghana,Netherlands,Amsterdam,52.36667,4.88333,Netherlands; Ghana,,Netherlands (U-19); Netherlands (U-21),Q18046760,high,wikidata-name+dob,,born abroad
-1220,Ernest Nuamah Nuamah,2003-11-01,FWD,Olympique Lyonnais,20,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q111584129,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
+1220,Ernest Nuamah,2003-11-01,FWD,Olympique Lyonnais,20,Ghana,Ghana,Accra,5.6037,-0.187,Ghana,,,Q111584129,high,wikidata-name+dob,fallback,fallback: birth city appears to be an unverified capital/default-city estimate; exclude from precise birth-city quizzes until verified.
 1221,Prince Kwabena Adu,2003-09-23,FWD,FC Viktoria Plzeň,6,Ghana,Ghana,Sunyani,7.33333,-2.33333,Ghana,,,Q97356007,high,wikidata-name+dob,,
 1222,Marvin Elom Senaya,2001-01-28,DEF,AJ Auxerre,3,Ghana,France,Saint-Maurice,48.81833,2.43472,France; Ghana,,,Q108606228,high,wikidata-name+dob,,born abroad
 1223,Luis Ricardo Mejia,1991-03-16,GK,Club Nacional,56,Panama,Panama,Panama City,8.97111,-79.53472,Panama,Panama,Panama (U-17); Panama (U-20),Q2465298,high,wikidata-name+dob,,
