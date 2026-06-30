@@ -95,6 +95,11 @@ for r in ROWS:
         "dob": r["date_of_birth"], "caps": int(r["caps"]) if r["caps"].isdigit() else 0,
         "born_in": born_name, "born_iso": born_iso, "born_city": r["born_city"],
         "lat": lat, "lng": lng,
+        # CSV marks needs_review="fallback" where the real birth city is unknown and
+        # born_city/lat/lng were manually set to the player's country's CAPITAL as a
+        # placeholder. born_in (country) is still trusted; born_city/lat/lng are NOT.
+        # Game UI must not present born_city as a specific clue/fact when this is true.
+        "born_city_is_fallback": r["needs_review"] == "fallback",
         "citizenships": [c.strip() for c in r["qualified_for_proxy_citizenship"].split(";") if c.strip()],
         "youth_for": sorted(youth), "senior_for": sorted(senior),
         "switched_from": sorted((youth|senior)-{cur}),
@@ -130,3 +135,6 @@ print(f"app_data.json: {len(out_teams)} teams, {len(ROWS)} players")
 alg=[t for t in out_teams if t["name"]=="Algeria"][0]
 print("Algeria now:", alg["stats"]["n_born_abroad"],"/",alg["stats"]["squad_size"],
       "born abroad; counts:", dict(Counter(p["born_in"] for p in alg["players"])))
+n_fallback=sum(1 for t in out_teams for p in t["players"] if p["born_city_is_fallback"])
+print(f"players with born_city_is_fallback=True (capital-city placeholder, not a real birth city): {n_fallback}")
+print("  -> these should not be shown as a specific born_city clue/fact in any game UI (see HANDOFF.md)")

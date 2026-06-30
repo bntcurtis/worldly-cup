@@ -48,28 +48,39 @@ systems).
    USA/United States, IR Iran/Iran, Côte d'Ivoire/Ivory Coast, Türkiye/Turkey, etc.).
 
 ## Data quality (current build)
-- **1,212 / 1,248 (97%) high-confidence**, exact DOB-matched (1,091 by name+DOB, 147
-  rescued via the Wikipedia squad page).
-- **Only 10 unmatched + 26 low-confidence** (36 rows flagged `needs_review`).
-- **1,227 players have birthplace coordinates**; 302 born abroad; 77 played youth football
-  for a different nation than they now represent.
+- **1,227 / 1,248 (98%) high-confidence.** 0 rows currently flagged `needs_review` — the
+  remaining low/medium-confidence rows (21 total) were since hand-verified outside the
+  pipeline (see `match_source = web-verified`) and no longer need attention.
+- **1,227+ players have birthplace coordinates.**
 
-### Known limitations (the `needs_review` rows)
-- The ~36 unresolved players are concentrated where the roster's romanization has no clean
-  Wikipedia hit (some Saudi, Iraqi, Egyptian, Iranian players). Assign their `wikidata_qid`
-  by hand to finish.
+> **⚠️ CSV vs. app_data.json — two slightly different pictures, read before trusting either:**
+> `players_worldcup2026.csv`'s own `born_in` / `notes` columns come straight from Wikidata's
+> P17 (country) property, which is **wrong for colonial-history birthplaces** — e.g. it lists
+> *France* as the country for cities in Algeria because France historically administered
+> Algeria. **`build_appdata.py` independently re-derives `born_in` from each player's
+> `born_lat`/`born_lng` via point-in-polygon against `countries_50m.geojson`**, which is
+> correct (Algeria is 16/26 born abroad, not the CSV-implied 25/26). The live app reads only
+> `app_data.json`, so it shows the correct numbers — but **any one-off analysis run directly
+> against the CSV's `born_in` column will reproduce the colonial-history bug.** Always derive
+> birth country from coordinates, not the CSV's `born_in` field. See "Known issues" in
+> `HANDOFF.md` for the full story.
+
+### Known limitations
 - **`qualified_for_proxy_citizenship` is a *proxy*, not ground truth.** FIFA eligibility
   also covers grandparents and 5-year residency, which no public database fully captures.
 - **Youth-cap coverage varies** — well documented for prominent players, patchy for others.
 - A handful of birthplaces resolve only to a country (no city), so their coordinates are a
   country centroid rather than a precise point.
+- **Pin placement on the map has known issues** — see `HANDOFF.md`.
 
 ## Notable findings
-- **Most foreign-born squads**: Algeria 25/26, Curaçao 23/26, Morocco & DR Congo 18/26,
-  Bosnia & Haiti 16/26.
+(numbers below are from `app_data.json`, i.e. coordinate-corrected — see warning above)
+- **Most foreign-born squads**: Curaçao 24/26, Congo DR 20/26, Morocco 18/26, Haiti 17/26,
+  Algeria & Bosnia and Herzegovina 16/26.
 - **Allegiance switchers** (youth for one nation, now another): Brahim Díaz (Spain→Morocco),
   Sead Kolašinac (Germany→Bosnia), Bilal El Khannouss (Belgium→Morocco), Sofyan Amrabat
-  (Netherlands→Morocco), and 73 others.
+  (Netherlands→Morocco), and many others (124 total players with some prior allegiance,
+  per `app_data.json` team stats).
 
 ## Source & licensing
 Derived from Wikidata (CC0), English Wikipedia (CC BY-SA), and the community FIFA WC2026
