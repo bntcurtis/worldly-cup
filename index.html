@@ -90,7 +90,10 @@
   /* pegman birthplace markers */
   /* explicit size so MapLibre's translate(-50%) anchor uses the rendered width,
      not the image's natural width (which threw pins ~13° off) */
-  .peg{position:relative;width:28px;height:46px;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
+  /* MUST be absolute: MapLibre positions each marker via a transform from the map origin.
+     With position:relative the element stays in document flow and the transform offsets it
+     from there, stacking all pins into a vertical column instead of their map coordinates. */
+  .peg{position:absolute;top:0;left:0;width:28px;height:46px;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
   .peg img{width:28px;height:46px;display:block}
   .peg .badge{position:absolute;top:-6px;right:-9px;background:var(--accent);color:#06243b;font-weight:800;
     border:1.5px solid #fff;border-radius:11px;font-size:11px;line-height:16px;min-width:18px;text-align:center;padding:0 3px}
@@ -168,7 +171,7 @@
     <button class="ghost" id="clueBtn">🔍 Next clue <span id="cluePts" style="color:var(--gold)"></span></button>
     <button class="primary" id="nextBtn" style="display:none">Next player ▶</button>
   </div>
-  <div class="hint" id="gameHint">Click the country on the map you think they <b>currently play for</b>. The 48 competing nations are highlighted blue.</div>
+  <div class="hint" id="gameHint">Click the country on the map you think he <b>currently plays for</b>. The 48 competing nations are highlighted blue.</div>
   <div class="flash" id="flash"></div>
   <div class="result" id="result"></div>
 </div>
@@ -233,7 +236,7 @@ let MAP, DATA, GEO, FEAT_BY_ISO={}, mode='game', markers=[];
 let TEAM_BY_ISO={}, POOL=[], used=new Set(), HI={}, hoverOn=false;
 let round=null, score=0, solved=0, played=0;
 let fround=null, fscore=0, fdone=0, flives=3, fused=new Set();
-let gstate=null, gscore=0, gsolved=0, gplayed=0, gused=new Set();
+let gstate=null, gscore=0, gsolved=0, gplayed=0, gused=new Set(), GUESS_POOL=[];
 
 const age = dob => { const d=new Date(dob); let a=AGE_REFERENCE_DATE.getFullYear()-d.getFullYear();
   if(AGE_REFERENCE_DATE.getMonth()<d.getMonth()||(AGE_REFERENCE_DATE.getMonth()==d.getMonth()&&AGE_REFERENCE_DATE.getDate()<d.getDate())) a--; return a; };
@@ -257,8 +260,19 @@ async function init(){
     fetch('countries_50m.geojson?v='+APP_VERSION).then(r=>{ if(!r.ok) throw new Error('countries_50m.geojson '+r.status); return r.json(); }),
     fetch('app_data.json?v='+APP_VERSION).then(r=>{ if(!r.ok) throw new Error('app_data.json '+r.status); return r.json(); })
   ]);
-  GEO.features.forEach(f=>{ f.id = ISO(f); FEAT_BY_ISO[f.id]=f; });
+  // Some ISOs span several geojson features (e.g. AUS = mainland + Indian Ocean Ter. +
+  // Ashmore Is.; FRA/USA have overseas territories). Key each ISO to its LARGEST feature
+  // (the mainland) so highlights land on the country, not an invisible offshore speck.
+  GEO.features.forEach(f=>{ const id=ISO(f); f.id=id;
+    const prev=FEAT_BY_ISO[id];
+    if(!prev || featVerts(f)>featVerts(prev)) FEAT_BY_ISO[id]=f; });
   DATA.teams.forEach(t=>{ if(t.iso3) TEAM_BY_ISO[t.iso3]=t; });
+  // "Guess the Team" requires clicking the one correct nation, but England & Scotland share the
+  // single UK (GBR) polygon and can't be told apart on a country map — so teams that don't map to
+  // a UNIQUE polygon are kept out of that mode's rotation. They still appear in Whose Team? and
+  // Birthplace Hunt, where clicking the shared UK polygon is the unambiguous correct action.
+  const isoCount={}; DATA.teams.forEach(t=>{ if(t.iso3) isoCount[t.iso3]=(isoCount[t.iso3]||0)+1; });
+  GUESS_POOL = DATA.teams.filter(t=>t.iso3 && isoCount[t.iso3]===1);
   DATA.teams.forEach(t=>t.players.forEach(p=>{
     if(p.confidence==='high' && p.lat!=null && (p.born_abroad||p.switched_from.length||p.citizenships.length>1))
       POOL.push({p, team:t});
@@ -297,9 +311,11 @@ async function init(){
     if(hoverOn){ const tt=document.getElementById('tt'); tt.textContent=f.properties.NAME;
       tt.style.left=(e.point.x+14)+'px'; tt.style.top=e.point.y+'px'; tt.style.display='block';
       clearTimeout(tt._t); tt._t=setTimeout(()=>{ tt.style.display='none'; },1400); }
-    if(mode==='game') onGuess(f.id, f.properties.NAME);
-    else if(mode==='guess') onGuessTeam(f.id, f.properties.NAME);
-    else if(mode==='find') onFindGuess(f.id); });
+    // use the ISO from feature PROPERTIES — MapLibre drops our non-numeric f.id, so f.id is undefined
+    const fid=ISO(f);
+    if(mode==='game') onGuess(fid, f.properties.NAME);
+    else if(mode==='guess') onGuessTeam(fid, f.properties.NAME);
+    else if(mode==='find') onFindGuess(fid); });
   // hover tooltip with country name
   const tt=document.getElementById('tt');
   MAP.on('mousemove','country-fill', e=>{ const f=e.features[0]; if(!f) return;
@@ -335,6 +351,9 @@ function delHi(iso){ delete HI[iso]; renderHi(); }
 function clearHi(){ HI={}; renderHi(); }
 function clearMarkers(){ markers.forEach(m=>m.remove()); markers=[]; }
 
+function featVerts(f){ const g=f.geometry; let n=0;
+  const polys = g.type==='Polygon' ? [g.coordinates] : g.coordinates;
+  polys.forEach(p=>p.forEach(r=>n+=r.length)); return n; }
 function repPoint(f){
   const g=f.geometry; let ring;
   if(g.type==='Polygon') ring=g.coordinates[0];
@@ -456,7 +475,7 @@ function onGuess(iso, name){
     const r=round; setTimeout(()=>{ if(round!==r||mode!=='game') return; if(TEAM_BY_ISO[iso]) setHi(iso,'team'); else delHi(iso); }, 900);
     const left=3-round.wrongs;
     document.getElementById('flash').textContent = left>0
-      ? `❌ Not ${name||'there'} — they don't play for that country. ${left} ${left===1?'guess':'guesses'} left.`
+      ? `❌ Not ${name||'there'} — he doesn't play for that country. ${left} ${left===1?'guess':'guesses'} left.`
       : '';
     if(round.wrongs>=3){ played++; endRound(false,0); }
   }
@@ -516,8 +535,8 @@ function updateGMisses(){ document.getElementById('gmisses').textContent='●'.r
 
 function newGuessRound(){
   let team,guard=0;
-  do{ team=DATA.teams[Math.floor(Math.random()*DATA.teams.length)]; guard++; } while(gused.has(team.name)&&guard<200);
-  gused.add(team.name); if(gused.size>=DATA.teams.length) gused.clear();
+  do{ team=GUESS_POOL[Math.floor(Math.random()*GUESS_POOL.length)]; guard++; } while(gused.has(team.name)&&guard<200);
+  gused.add(team.name); if(gused.size>=GUESS_POOL.length) gused.clear();
   gstate={ team, clues:buildTeamClues(team), shown:0, misses:0, done:false };
   clearMarkers(); highlightTeams();
   MAP.flyTo({center:[-25,25],zoom:1.05});
@@ -580,8 +599,12 @@ function revealGuess(win, reason, pts){
   const s=team.stats;
   const r=document.getElementById('gresult');
   r.className='result '+(win?'win':'lose'); r.style.display='block';
+  // only say "most from X" when that origin is an actual plurality (>=2); with a single
+  // player there's no "most" (e.g. 2 born abroad in 2 different countries)
+  const topN = s.top_foreign_origin ? s.foreign_born_counts[s.top_foreign_origin] : 0;
+  const originBit = topN>=2 ? `, most from ${esc(s.top_foreign_origin)}` : '';
   r.innerHTML=(win?`⚽ <b>Back of the net!</b> <span class="pts">+${pts}</span><br>`:`📋 <b>It was ${esc(team.name)}.</b><br>`)
-    +`${esc(team.name)} — ${s.n_born_abroad}/${s.squad_size} born abroad${s.top_foreign_origin?`, most from ${esc(s.top_foreign_origin)}`:''}.`;
+    +`${esc(team.name)} — ${s.n_born_abroad}/${s.squad_size} born abroad${originBit}.`;
 }
 
 /* ---------- BIRTHPLACE HUNT ---------- */
