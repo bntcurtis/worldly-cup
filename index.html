@@ -210,11 +210,12 @@
   </div>
   <div class="row">
     <button class="ghost tiny" id="fhint">⚽ Assist: how many?</button>
-    <button class="ghost tiny" id="fhint2" title="Unlocks when you're down to your last substitution">🌍 Assist: continents?</button>
+    <button class="ghost tiny" id="fhint2" title="Unlocks once you've missed twice this round">🌍 Assist: continents?</button>
     <button class="ghost tiny" id="fskip">Reveal &amp; skip</button>
     <button class="primary" id="fnext" style="display:none">Next team ▶</button>
   </div>
   <div class="hint" id="fhintTxt">Click every country where this team's players were born — including their home country (highlighted gold).</div>
+  <div class="hint" id="fassist" style="display:none;color:var(--ink)"></div>
   <div class="flash" id="fflash"></div>
   <div class="result" id="fresult"></div>
 </div>
@@ -626,13 +627,24 @@ function foreignContinents(){
   fround.answer.forEach(iso=>{ if(iso!==home){ const f=FEAT_BY_ISO[iso]; if(f&&f.properties.CONTINENT) conts.add(f.properties.CONTINENT); } });
   return [...conts].sort();
 }
+// assist messages are sticky for the rest of the round — shown in their own box, not the
+// transient click-feedback flash, and stack if the player uses both assists
+function addAssistMsg(msg){
+  fround.assistMsgs.push(msg);
+  const el=document.getElementById('fassist');
+  el.innerHTML=fround.assistMsgs.join('<br>');
+  el.style.display='block';
+}
+function updateAssist2(){
+  document.getElementById('fhint2').disabled = !fround||fround.done||fround.hinted2||fround.strikes<2;
+}
 
 function newFindRound(){
   let team,guard=0;
   do{ team=DATA.teams[Math.floor(Math.random()*DATA.teams.length)]; guard++; } while(fused.has(team.name)&&guard<200);
   fused.add(team.name); if(fused.size>=DATA.teams.length) fused.clear();
   const answer = new Set(Object.values(team.birth_iso3));
-  fround={ team, answer, found:new Set(), strikes:0, done:false, hinted:false, hinted2:false, wrong:new Set() };
+  fround={ team, answer, found:new Set(), strikes:0, done:false, hinted:false, hinted2:false, wrong:new Set(), assistMsgs:[] };
   clearHi(); clearMarkers();
   setHi(team.iso3,'home');
   MAP.flyTo({center:[-25,25],zoom:1.05,duration:700});
@@ -641,12 +653,12 @@ function newFindRound(){
   document.getElementById('ftotal').textContent='';
   document.getElementById('fstrikes').textContent='○○○';
   document.getElementById('fflash').textContent='';
+  document.getElementById('fassist').style.display='none'; document.getElementById('fassist').innerHTML='';
   document.getElementById('fresult').style.display='none';
   document.getElementById('fnext').style.display='none'; document.getElementById('fnext').textContent='Next team ▶';
   document.getElementById('fhint').disabled=false;
-  // the continents assist only unlocks when you're down to your last substitution
-  document.getElementById('fhint2').disabled = flives!==1;
   document.getElementById('fhint2').style.display='';
+  updateAssist2();   // continents assist unlocks once you've missed twice THIS round (starts locked)
   document.getElementById('fskip').style.display='';
   document.getElementById('fhintTxt').style.display='block';
   updateFLives();
@@ -675,24 +687,25 @@ function onFindGuess(iso){
     fround.strikes++;
     document.getElementById('fstrikes').textContent='●'.repeat(fround.strikes)+'○'.repeat(3-fround.strikes);
     setHi(iso,'wrong');                                   // stays red for the rest of the round
+    updateAssist2();
     const left=3-fround.strikes;
     document.getElementById('fflash').textContent = left>0 ? `❌ No player born there. ${left} ${left===1?'miss':'misses'} left.` : '';
     if(fround.strikes>=3) endFindRound(false,'strikeout');
   }
 }
 
-function findHint(){ if(!fround||fround.done) return;
+function findHint(){ if(!fround||fround.done||fround.hinted) return;
   fround.hinted=true; const n=fround.answer.size;
   document.getElementById('ftotal').textContent=' / '+n;
-  document.getElementById('fflash').textContent=`💡 This squad was born across ${n} ${n===1?'country':'countries'} (including home).`;
+  addAssistMsg(`💡 This squad was born across ${n} ${n===1?'country':'countries'} (including home).`);
   document.getElementById('fhint').disabled=true; }
 
-function findHint2(){ if(!fround||fround.done||flives!==1||fround.hinted2) return;
-  fround.hinted2=true; document.getElementById('fhint2').disabled=true;
+function findHint2(){ if(!fround||fround.done||fround.strikes<2||fround.hinted2) return;
+  fround.hinted2=true; updateAssist2();
   const conts=foreignContinents();
-  document.getElementById('fflash').textContent = conts.length
+  addAssistMsg(conts.length
     ? `🌍 Players born abroad come from: ${conts.join(', ')}.`
-    : `🌍 Every player was born at home — no foreign continents.`; }
+    : `🌍 Every player was born at home — no foreign continents.`); }
 
 function endFindRound(win, reason){
   fround.done=true;
