@@ -3,6 +3,17 @@
 Written for whoever (human or agent) picks this up next. Repo: https://github.com/bntcurtis/worldly-cup
 (deployed via Cloudflare Pages from the pushed branch — static site, no build step).
 
+> **STATUS — 2026-06-30: the issues described further down are RESOLVED.** This document is now
+> mostly historical background. Since it was written, the app has been fixed: map-click grading
+> (features carry no id, so clicks read the ISO from properties), pin placement (`.peg` is
+> `position:absolute`), highlight of multi-feature countries (keep the largest feature per ISO),
+> fetch error/loading UI, mobile nav reflow, clue de-duplication + fallback clues, and more. The
+> UK is now **split into England/Scotland/Wales/N. Ireland** as distinct polygons, so the home
+> nations are separate teams (no GBR collapse). Default mode is **Birthplace Hunt**. Any claim
+> below that pin placement, fallback clues, or the England/Scotland collapse are "outstanding" is
+> stale. Data workflow is unchanged: edit `players_worldcup2026.csv`, run `python3 build_appdata.py`,
+> never run `build_dataset.py`.
+
 ## What this is
 
 A WC2026 player-origins explorer + three browser games, built around one dataset: for each of

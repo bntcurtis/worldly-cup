@@ -7,11 +7,17 @@ allegiance-switch stories (e.g. Morocco players who came up through Dutch and Fr
 systems).
 
 ## Files
-- **`players_worldcup2026.csv`** — the dataset, 1,248 players (48 teams × 26).
-- **`build_dataset.py`** — the reproducible pipeline. `python3 build_dataset.py`
-  (Python 3, stdlib only; needs internet). Caches all Wikidata/Wikipedia responses under
-  `cache/`, so re-runs are fast and resumable. Delete `cache/entities.json` to force a
-  clean re-fetch.
+- **`players_worldcup2026.csv`** — the dataset (canonical, hand-curated), 1,248 players (48 teams × 26).
+- **`build_appdata.py`** — the live pipeline the app uses. Pure transform:
+  `players_worldcup2026.csv` → `app_data.json` (Python 3, stdlib only, no network). Run
+  `python3 build_appdata.py` after any edit to the CSV. It derives each player's birth country
+  from their coordinates (point-in-polygon against `countries_50m.geojson`), never overwrites the CSV.
+- **`index.html`** — the whole app (UI, three games, MapLibre map). Static; just serve the folder.
+- **`countries_50m.geojson`** — Natural Earth country polygons. The UK is split into its constituent
+  countries (England/Scotland/Wales/N. Ireland) so the home nations are distinct teams on the map.
+- **`build_dataset.py`** — **deprecated** original Wikidata/Wikipedia scraper (needs `--force` to run).
+  Kept for methodology reference only; do **not** run it in the normal workflow — it would clobber
+  the hand-curated corrections in the CSV. See `HANDOFF.md`.
 
 ## Columns
 | column | meaning |

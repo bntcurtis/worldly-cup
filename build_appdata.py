@@ -52,7 +52,17 @@ def country_at(lng, lat):
         for poly in polys:
             if in_ring(lng, lat, poly[0]) and not any(in_ring(lng,lat,h) for h in poly[1:]):
                 return iso, name
-    return None, None
+    # Coastal snap: some birth coords sit just off the simplified 50m coastline (e.g. Liverpool
+    # on the Mersey estuary, or Gulf-coast cities). If the point is inside no country, snap to the
+    # nearest country boundary within ~0.3 deg (~33 km). Prevents orphaned born_iso at the coast.
+    best=None; bestd=0.3*0.3
+    for iso, name, (mnx,mny,mxx,mxy), polys in COUNTRIES:
+        if lng<mnx-0.4 or lng>mxx+0.4 or lat<mny-0.4 or lat>mxy+0.4: continue
+        for poly in polys:
+            for x,y in poly[0]:
+                d=(x-lng)*(x-lng)+(y-lat)*(y-lat)
+                if d<bestd: bestd=d; best=(iso,name)
+    return best if best else (None,None)
 
 # team metadata
 TEAM_META = {}
@@ -63,10 +73,14 @@ if os.path.exists(tcsv):
             "group":t.get("group_letter",""), "confederation":t.get("confederation","")}
 
 # name -> iso (for team home countries) using the geojson + aliases
+# England/Scotland/Wales/N. Ireland are distinct football nations AND distinct map polygons
+# (the UK is split into its constituent countries in countries_50m.geojson), so map each to its
+# own subunit code rather than collapsing to GBR. This makes e.g. an England-born Scotland player
+# correctly count as "born abroad".
 ALIASES = {"USA":"USA","Côte d'Ivoire":"CIV","IR Iran":"IRN","Congo DR":"COD",
     "Cabo Verde":"CPV","Türkiye":"TUR","South Korea":"KOR","Czechia":"CZE",
-    "Bosnia and Herzegovina":"BIH","England":"GBR","Scotland":"GBR","Wales":"GBR",
-    "Northern Ireland":"GBR","Curaçao":"CUW"}
+    "Bosnia and Herzegovina":"BIH","England":"ENG","Scotland":"SCT","Wales":"WLS",
+    "Northern Ireland":"NIR","Curaçao":"CUW"}
 NAME2ISO = {}
 for iso,name,_,_ in COUNTRIES: NAME2ISO[name]=iso
 def iso_of(country):
